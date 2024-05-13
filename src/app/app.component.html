@@ -1,0 +1,33 @@
+<div *ngIf="showHeader" class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+
+    <div class="content-wrapper">
+      <app-header></app-header>
+      <!-- Content -->
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <router-outlet></router-outlet>
+      </div>
+      <!-- / Content -->
+      <app-footer></app-footer>
+      <div class="content-backdrop fade"></div>
+    </div>
+  </div> <!-- Content wrapper -->
+</div>
+
+<div *ngIf="!showHeader" class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+
+    <div class="content-wrapper">
+      <!-- <app-header></app-header> -->
+      <!-- Content -->
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <app-connexion></app-connexion>
+      </div>
+      <!-- / Content -->
+      <!-- <app-footer></app-footer> -->
+      <div class="content-backdrop fade"></div>
+    </div>
+  </div> <!-- Content wrapper -->
+</div>
+
+

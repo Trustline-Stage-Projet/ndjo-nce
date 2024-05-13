@@ -1,0 +1,137 @@
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Entreprise Partenaire /</span> Ajouter
+</h4>
+<div class="container">
+  <div class="row mt-5  justify-content-center"> <!-- Ajout de la classe justify-content-center -->
+    <div class="col">
+      <!-- Shared Event -->
+      <div class="col-md-10 col-xl-10  mx-auto mb-4">
+        <div class="card h-100 ">
+          <div class="card-header flex-grow-0">
+            <h4>Donnees Entreprise Partenaire</h4>
+            <div class="card-body">
+             
+              <form  [formGroup]="entrepriseForm" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="nom">Nom de l'entreprise:</label>
+                  <input type="text" class="form-control" id="nom" formControlName="nom" required
+                  placeholder="Entrez le nom de l'entreprise">
+                </div>
+                <div class="form-group">
+                  <label for="adresse">Adresse:</label>
+                  <input type="text" class="form-control" id="adresse" formControlName="adresse" 
+                  placeholder="Entrez l'adresse de l'entreprise" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input type="email" class="form-control" id="email" formControlName="email" 
+                  placeholder="Entrez l'email de l'entreprise" required>
+                </div>
+                <div class="form-group">
+                  <label for="telephone">Téléphone:</label>
+                  <input type="tel" class="form-control" id="telephone" formControlName="telephone" 
+                  placeholder="Entrez le numero de telephone de l'entreprise" required>
+                </div>
+                <div class="form-group">
+                  <label for="site_web">Site Web:</label>
+                  <input type="url" class="form-control" id="site_web" formControlName="site_web"
+                  placeholder="Entrez l'Url de l'entreprise">
+                </div>
+                <div class="form-group">
+                  <label for="date_ajout">Date d'ajout:</label>
+                  <input type="date" class="form-control" id="date_ajout" formControlName="date_ajout" required>
+                </div>
+                <div class="form-group">
+                  <label for="description">Description:</label>
+                  <textarea class="form-control" id="description" formControlName="description"></textarea>
+                </div>
+                <div class="form-group my-2">
+                  <label for="logo">Logo:</label>
+                  <input type="file" id="logo" class="form-control" (change)="onLogoChange($event)">
+                </div>
+                <div class="form-group">
+                  <label for="pays_operation">Pays d'opération:</label>
+                  <input type="text" class="form-control" id="pays_operation" formControlName="pays_operation" 
+                  placeholder="Entrez le pays d'operation de l'entreprise" required>
+                </div>
+                <div class="form-group">
+                  <label for="ville_operation">Ville d'opération:</label>
+                  <input type="text" class="form-control" id="ville_operation" formControlName="ville_operation" 
+                  placeholder="Entrez la ville operation de l'entreprise" required>
+                </div>
+                <div class="form-group">
+                  <label for="nom_DG">Nom du DG de l'entreprise:</label>
+                  <input type="text" class="form-control" id="nom_DG" formControlName="nom_DG" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="contact_DG">Contact du DG de l'entreprise:</label>
+                  <input type="text" class="form-control" id="contact_DG" formControlName="contact_DG" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="email_DG">Email du DG de l'entreprise:</label>
+                  <input type="email" class="form-control" id="email_DG" formControlName="email_DG" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="nom_Dr_des_Finances">Nom du Dr des Finances</label>
+                  <input type="text" class="form-control" id="nom_Dr_des_Finances" formControlName="nom_Dr_des_Finances" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="contact_Dr_des_Finances">Contact du Dr des Finances:</label>
+                  <input type="tel" class="form-control" id="contact_Dr_des_Finances" formControlName="contact_Dr_des_Finances" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="email_Dr_des_Finances">Email du Dr des Finances:</label>
+                  <input type="email" class="form-control" id="email_Dr_des_Finances" formControlName="email_Dr_des_Finances" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="nom_Chargé_de_la_clientèle">Nom Chargé de la clientèle:</label>
+                  <input type="text" class="form-control" id="nom_Chargé_de_la_clientèle" formControlName="nom_Chargé_de_la_clientèle" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="contact_Chargé_de_la_clientèle">Contact Chargé de la clientèle:</label>
+                  <input type="tel" class="form-control" id="contact_Chargé_de_la_clientèle" formControlName="contact_Chargé_de_la_clientèle" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="form-group">
+                  <label for="email_Chargé_de_la_clientèle">Email Chargé de la clientèle:</label>
+                  <input type="email" class="form-control" id="email_Chargé_de_la_clientèle" formControlName="email_Chargé_de_la_clientèle" 
+                  placeholder="- pas encore défini -">
+                </div>
+                <div class="my-4">
+                  <button type="button" routerLink="/listEntreprise" class="btn btn-danger btn-sm mx-2">Retour </button>
+                  <button type="button" class="btn btn-primary btn-sm" (click)="addEntreprise()">Ajouter</button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal de succès -->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalLongTitle">Information</h5>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.dismiss('Close click')">Fermer</button>
+      <button class="btn btn-primary btn-sm" (click)="modalRef.dismiss('Close click')" routerLink="/listEntreprise"> Voir
+        l'Entreprise</button>
+    </div>
+  </div>
+
+</ng-template>

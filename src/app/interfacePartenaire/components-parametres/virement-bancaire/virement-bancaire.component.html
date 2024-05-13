@@ -1,0 +1,119 @@
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">Configuration /</span>
+  Compte Bancaire </h4>
+
+<div class="container">
+  <div class="row mt-5  justify-content-center">
+    <!-- Ajout de la classe justify-content-center -->
+    <div class="col">
+      <!-- Shared Event -->
+      <div class="col-md-10 col-xl-10  mx-auto mb-4">
+        <div class="card h-100 ">
+          <div class="card-header flex-grow-0">
+            <h4>Information du compte bancaire</h4>
+            <!-- Formulaire pour ajouter l'e-mail ici -->
+            <form [formGroup]="form" *ngIf="!isUpdateForm">
+              <div class="form-group my-3">
+                <label for="iban">Code IBAN :</label>
+                <input type="text" class="form-control" id="iban" formControlName="iban">
+              </div>
+              <div class="form-group my-3">
+                <label for="bic">Code SWIFT/BIC :</label>
+                <input type="text" class="form-control" id="bic" formControlName="bic">
+              </div>
+              <div class="form-group my-3">
+                <label for="titulaire">Titulaire du Compte :</label>
+                <input type="text" class="form-control" id="titulaire" formControlName="titulaire">
+              </div>
+
+              <div class="form-group my-3">
+                <label for="libelleCompte">Numéro de compte bancaire :</label>
+                <input type="text" class="form-control" id="libelleCompte" formControlName="libelleCompte">
+              </div>
+
+              <div class="form-group my-3">
+                <label for="libelleCompte">Nom de la banque :</label>
+                <input type="text" class="form-control" id="banque" formControlName="banque">
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description :</label>
+                <textarea id="description" class="form-control" rows="4" formControlName="description"></textarea>
+              </div>
+              <div class="d-flex align-items-center justify-content-between my-4">
+                <button type="button" class="btn btn-danger btn-sm" routerLink="/parametres">Annuler</button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="addVirement()">Ajouter</button>
+              </div>
+            </form>
+
+            <form *ngIf="isUpdateForm" [formGroup]="Updateform">
+              <div class="form-group my-3">
+                <label for="iban">Code IBAN :</label>
+                <input type="text" class="form-control" id="iban" formControlName="iban">
+              </div>
+              <div class="form-group my-3">
+                <label for="bic">Code SWIFT/BIC :</label>
+                <input type="text" class="form-control" id="bic" formControlName="bic">
+              </div>
+              <div class="form-group my-3">
+                <label for="titulaire">Titulaire du Compte :</label>
+                <input type="text" class="form-control" id="titulaire" formControlName="titulaire">
+              </div>
+
+              <div class="form-group my-3">
+                <label for="libelleCompte">Numéro de compte bancaire :</label>
+                <input type="text" class="form-control" id="libelleCompte" formControlName="libelleCompte">
+              </div>
+
+              <div class="form-group my-3">
+                <label for="libelleCompte">Nom de la banque :</label>
+                <input type="text" class="form-control" id="banque" formControlName="banque">
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description :</label>
+                <textarea id="description" class="form-control" rows="4" formControlName="description"></textarea>
+              </div>
+              <div class="my-4">
+                <button type="button" class="btn btn-danger btn-sm" routerLink="/parametres">Annuler</button>
+                <button type="button" class="btn btn-primary btn-sm mx-2"
+                (click)="openConfirmationModal(confirmModal)">Modifier</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!--/ Shared Event -->
+</div>
+
+<!-- Modal de succès -->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalLongTitle">Information</h5>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-sm" routerLink="/parametres"
+        (click)="modalRef.dismiss('Close click')">Fermer</button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #confirmModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation de mise a jour</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir modifier ces informations ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>

@@ -1,0 +1,444 @@
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuration/</span>Informations Supplementaires</h4>
+
+<div class="row">
+  
+  <!-- Customer Content -->
+  <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1 mx-auto">
+
+   
+    <div class="d-flex  justify-content-between">
+      
+      <ul class="nav nav-pills flex-column flex-md-row mb-4">
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="activerBouton(1)" [class.active]="estActif(1)">
+            <i class="bx bx-cog me-1"></i>Configurations
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="activerBouton(2)" [class.active]="estActif(2)">
+            <i class="bx bx-detail me-1"></i>Information Compte
+          </a>
+        </li>
+      </ul>
+      <button class="btn btn-danger m-auto mx-2" routerLink="/listEntreprise">Retour</button>
+
+    </div>
+   
+    <!-- configurations -->
+    <div *ngIf="estActif(1)">
+
+
+      <!-- attributs -->
+      <div class="card card-action mb-4">
+        <div class="card-header align-items-center">
+          <h5 class="card-action-title mb-0">Supplements</h5>
+          <div class="card-action-element">
+            <button class="btn btn-outline-light btn-sm" type="button" routerLink="/addAttribut"
+              *ngIf="attributList.length > 0">
+              <i class="bx bx-add-to-queue text-primary bx-sm"></i></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="added-cards">
+            <div class="cardMaster border p-3 rounded mb-3" *ngIf="attributList.length === 0">
+              <div class="d-flex justify-content-between flex-sm-row flex-column">
+                <div class="card-information">
+                  <span>Aucun Supplement n'a été ajoutée.</span>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1">
+                    <button class="btn btn-light me-3 btn-sm" routerLink="/addAttribut">
+                      <i class='bx bx-add-to-queue text-primary bx-sm'></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="attributList.length > 0">
+              <div class="cardMaster border p-3 rounded mb-3" *ngFor="let attribut of attributList">
+                <div class="d-flex justify-content-between flex-sm-row flex-column">
+                  <div class="card-information">
+                    <h5 class="pb-2 border-bottom mb-4">Details Des Supplements</h5>
+                    <ul class="list-unstyled">
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Libelle:</span>
+                        <span class="fw-bold">{{ attribut.nom_attribut }} (<span
+                            class="text-primary">{{attribut.prix_unitaire_attribut }}€</span>)</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Nombre Disponible:</span>
+                        <span class=" fw-bold">{{ attribut.nombre_maximum }}</span>
+                      </li>
+                      
+                    </ul>
+                  </div>
+                  <div class="d-flex flex-column text-start text-lg-end">
+                    <div class="d-flex order-sm-0 order-1">
+                      <button class="btn btn-warning me-3 btn-sm" routerLink="/updateAttribut/{{attribut.id}}"><i
+                          class='bx bx-edit'></i></button>
+                      <button class="btn btn-danger btn-sm"
+                        (click)="openConfirmationModal(confirmationModal, attribut.id)"><i
+                          class='bx bx-trash'></i></button>
+                    </div>
+                    <small class="mt-sm-auto mt-2 order-sm-1 order-0">Créé le : {{ attribut.createdAt | date:'dd MMM
+                      yyyy
+                      à
+                      HH:mm'
+                      }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/ attributs -->
+
+      <!-- types de vehicules -->
+      <div class="card card-action mb-4">
+        <div class="card-header align-items-center">
+          <h5 class="card-action-title mb-0">Types de vehicules</h5>
+          <div class="card-action-element">
+            <button class="btn btn-outline-light btn-sm" type="button" routerLink="/addType"
+              *ngIf="typeVehiculeList.length > 0">
+              <i class="bx bx-add-to-queue text-primary bx-sm"></i></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="added-cards">
+            <div class="cardMaster border p-3 rounded mb-3" *ngIf="typeVehiculeList.length === 0">
+              <div class="d-flex justify-content-between flex-sm-row flex-column">
+                <div class="card-information">
+                  <span>Aucun type de vehicule n'a été ajoutée.</span>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1">
+                    <button class="btn btn-light me-3 btn-sm" routerLink="/addType">
+                      <i class='bx bx-add-to-queue text-primary bx-sm'></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="typeVehiculeList.length > 0">
+              <div class="cardMaster border p-3 rounded mb-3" *ngFor="let type of typeVehiculeList">
+                <div class="d-flex justify-content-between flex-sm-row flex-column">
+                  <div class="card-information">
+                    <h5 class="pb-2 border-bottom mb-4">Details du Type</h5>
+                    <ul class="list-unstyled">
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Type:</span>
+                        <span class="fw-bold">{{ type.nom_type }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Description:</span>
+                        <span class=" fw-bold">{{ type.description }}</span>
+                      </li>
+
+                    </ul>
+                  </div>
+                  <div class="d-flex flex-column text-start text-lg-end">
+                    <div class="d-flex order-sm-0 order-1">
+                      <button class="btn btn-warning me-3 btn-sm" routerLink="/updateType/{{type.id}}"><i
+                          class='bx bx-edit'></i></button>
+                      <button class="btn btn-danger btn-sm"
+                        (click)="openConfirmationModal2(confirmationModal2, type.id)"><i
+                          class='bx bx-trash'></i></button>
+                    </div>
+                    <small class="mt-sm-auto mt-2 order-sm-1 order-0">Créé le : {{ type.createdAt | date:'dd MMM yyyy
+                      à
+                      HH:mm'
+                      }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/ types de vehicules -->
+
+    </div>
+
+    <!-- comptes -->
+    <div *ngIf="estActif(2)">
+      
+      <!-- differents comptes -->
+      <div class="card card-action mb-4">
+        <div class="card-header align-items-center">
+          <h5 class="card-action-title mb-0">Comptes</h5>
+        </div>
+        <div class="card-body">
+          <div class="added-cards">
+
+            <div class="cardMaster border p-3 rounded mb-3">
+              <div class="d-flex justify-content-between flex-sm-row flex-column" *ngIf="virementList.length === 0">
+                <div class="card-information">
+                  <img class="mb-3 img-fluid w-25" src="../../assets/img/illustrations/banque.jpg" alt="Master Card">
+                  <h6 class="mb-1">Aucune information Disponible! Configurer les informations de votre compte Bancaire</h6>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1">
+                    <button class="btn btn-primary mx-4 btn-sm" routerLink="/addVirement">Configurer</button>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between flex-sm-row flex-column" *ngIf="virementList.length > 0">
+                <div class="card-information">
+                  <img class="mb-3 img-fluid w-25" src="../../assets/img/illustrations/banque.jpg" alt="Master Card">
+                  <h5 class="pb-2 border-bottom mb-4">Details Bancaire</h5>
+                  <ul class="list-unstyled">
+                    <ng-container *ngFor="let virement of virementList">
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Nom De La Banque:</span>
+                        <span class="fw-bold">{{ virement?.banque }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Titulaire Du Compte:</span>
+                        <span class="fw-bold">{{ virement?.titulaire }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Numéro De Compte:</span>
+                        <span class="fw-bold">{{ virement?.libelleCompte }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Code IBAN :</span>
+                        <span class="fw-bold">{{ virement?.iban }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Code SWIFT/BIC:</span>
+                        <span class="fw-bold">{{ virement?.bic }}</span>
+                      </li>
+                      <li class="mb-3 mx-2" *ngIf="virement?.description">
+                        <span class="fw-medium me-2">Description:</span>
+                        <span class="fw-bold">{{ virement?.description }}</span>
+                      </li>
+                    </ng-container>
+                  </ul>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1" *ngFor="let virement of virementList">
+                    <button class="btn btn-warning mx-4 btn-sm" routerLink="/updateVirement/{{virement?.id}}">
+                      <i class="bx bx-edit"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div class="cardMaster border p-3 rounded mb-3">
+              <div class="d-flex justify-content-between flex-sm-row flex-column" *ngIf="paypalList.length === 0">
+                <div class="card-information">
+                  <img class="mb-3 img-fluid w-25" src="../../assets/img/icons/payments/paypal-light.png"
+                    alt="Master Card">
+                  <div class="d-flex align-items-center mb-1">
+                    <h6 class="mb-0 me-3">Aucune information Disponible! Configurer les informations de votre compte PayPal</h6>
+                  </div>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1">
+                    <button class="btn btn-primary mx-4 btn-sm me-3" routerLink="/addPaypal">Configurer</button>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between flex-sm-row flex-column" *ngIf="paypalList.length > 0">
+                <div class="card-information">
+                  <img class="mb-3 img-fluid w-25" src="../../assets/img/icons/payments/paypal-light.png"
+                    alt="Master Card">
+                  <h5 class="pb-2 border-bottom mb-4">Details Compte</h5>
+                  <ul class="list-unstyled">
+                    <div *ngFor="let paypal of paypalList">
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Nom complet:</span>
+                        <span class="fw-bold">{{ paypal.nom_associer }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Adresse email liée à PayPal:</span>
+                        <span class="fw-bold">{{ paypal.email }}</span>
+                      </li>
+                      
+                    </div>
+                  </ul>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1" *ngFor="let paypal of paypalList">
+                    <button class="btn btn-warning mx-4 btn-sm" routerLink="/updatePaypal/{{paypal.id}}">
+                      <i class="bx bx-edit"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cardMaster border p-3 rounded">
+              <div class="d-flex justify-content-between flex-sm-row flex-column" *ngIf="stripeList.length === 0">
+                <div class="card-information">
+                  <img class="mb-3 img-fluid w-25" src="../../assets/img/icons/payments/stripe.png" alt="Visa Card">
+                  <h6 class="mb-1">Aucune information Disponible! Configurer les informations de votre compte Stripe</h6>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1">
+                    <button class="btn btn-primary me-3 mx-4 btn-sm" routerLink="/addStripe">Configurer</button>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between flex-sm-row flex-column" *ngIf="stripeList.length > 0">
+                <div class="card-information">
+                  <img class="mb-3 img-fluid w-25" src="../../assets/img/icons/payments/stripe.png" alt="Master Card">
+                  <h5 class="pb-2 border-bottom mb-4">Details Compte</h5>
+                  <ul class="list-unstyled">
+                    <div *ngFor="let stripe of stripeList">
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Numéro de carte de crédit:</span>
+                        <span class="fw-bold">{{ stripe.Num_carte_de_credit }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Date d'expiration de la carte :</span>
+                        <span class="fw-bold">{{ stripe.Date_expiration_carte | date:'dd MMM yyyy' }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Code de sécurité de la carte (CVC/CVV) :</span>
+                        <span class="fw-bold">{{ stripe.CVC_CVV }}</span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Nom du titulaire de la carte :</span>
+                        <span class="fw-bold">{{ stripe.titulaire }} </span>
+                      </li>
+                      <li class="mb-3 mx-2">
+                        <span class="fw-medium me-2">Adresse de facturation associée à la carte:</span>
+                        <span class=" text-primary fw-bold">{{ stripe.Adresse_facturation }}</span>
+                      </li>
+                    </div>
+                  </ul>
+                </div>
+                <div class="d-flex flex-column text-start text-lg-end">
+                  <div class="d-flex order-sm-0 order-1" *ngFor="let stripe of stripeList">
+                    <button class="btn btn-warning mx-4 btn-sm" routerLink="/updateStripe/{{stripe.id}}">
+                      <i class="bx bx-edit"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/ differents comptes -->
+
+    </div>
+
+  </div>
+</div>
+<!-- Modal de succès -->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modalLongTitle">Information</h4>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-sm" (click)="closePage()">Fermer</button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #confirmationModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('cancel')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Voulez-vous vraiment supprimer cet attribut ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss('cancel')">Annuler</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="modal.close('confirm')">Confirmer</button>
+  </div>
+</ng-template>
+
+<ng-template #confirmationModal2 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('cancel')">
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Voulez-vous vraiment supprimer cet type de vehicule ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss('cancel')">Annuler</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="modal.close('confirm')">Confirmer</button>
+  </div>
+</ng-template>
+
+<!-- 
+code couleur a faire plus tard 
+
+    <div class="col-lg-12 mb-4 order-0">
+    <div class="card">
+      <div class="d-flex align-items-end row">
+        <div class="col-sm-7">
+
+          <div class="card-body">
+            <h4 class="card-title text-primary">Les Codes Couleurs</h4>
+            <div *ngFor="let conf of confList" class="mb-4">
+
+              <div class="d-flex flex-column">
+                <h6 class="card-title my-4">Couleur Des Textes Du site</h6>
+                <h5 class="mb-0">
+                  <h6> Titre 1 :&nbsp;<span class="text-{{ conf.titreSite1 }}">{{
+                      mapBootstrapColorToFrench(conf.titreSite1)}}
+                    </span></h6>
+                  <h6> Titre 2 :&nbsp; <span class="text-{{ conf.titreSite2 }}">{{
+                      mapBootstrapColorToFrench(conf.titreSite2)}}
+                    </span></h6>
+                  <h6>Texte :&nbsp; <span class="text-{{ conf.texte }}">{{ mapBootstrapColorToFrench(conf.texte)
+                      }}</span></h6>
+                </h5>
+
+                <h6 class="card-title my-4">Couleur Des boutons Du site</h6>
+                <h5 class="mb-0">
+                  <h6> Ajout:&nbsp; <span class="text-{{ conf.btnAjout }}">{{ mapBootstrapColorToFrench(conf.btnAjout)
+                      }}</span></h6>
+                  <h6> Modifier:&nbsp; <span class="text-{{ conf.btnModifier }}">
+                      {{mapBootstrapColorToFrench(conf.btnModifier)}}</span></h6>
+                  <h6> Supprimer:&nbsp; <span class="text-{{ conf.btnSupprimer }}">{{
+                      mapBootstrapColorToFrench(conf.btnSupprimer)}}</span></h6>
+                  <h6>Details:&nbsp; <span class="text-{{ conf.btnDetail }}">{{
+                      mapBootstrapColorToFrench(conf.btnDetail)}}
+                    </span></h6>
+                </h5>
+
+                <h6 class="card-title my-4">Couleur Dans les Documents (Pdf...)</h6>
+                <h5 class="mb-0">
+                  <h6>Couleur Document:&nbsp; <span class="text-{{ conf.couleurDoc }}">
+                      {{mapBootstrapColorToFrench(conf.couleurDoc) }}</span>
+                  </h6>
+                  <h6>Titre Document:&nbsp; <span class="text-{{ conf.titreDoc }}">{{
+                      mapBootstrapColorToFrench(conf.titreDoc)
+                      }}</span>
+                  </h6>
+                  <h6> Texte Document:&nbsp; <span class="text-{{ conf.texteDoc }}">{{
+                      mapBootstrapColorToFrench(conf.texteDoc)}}</span></h6>
+                </h5>
+              </div>
+
+              <div class="my-4">
+                <button class="btn btn btn-primary btn-sm mx-2 " routerLink="/updateConf/{{conf.id}}"><i
+                    class="bx bx-edit"></i></button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="col-sm-5 text-center text-sm-left">
+          <div class="card-body pb-0 px-0 px-md-4">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ -->

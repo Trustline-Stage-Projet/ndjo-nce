@@ -1,0 +1,44 @@
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">Factures /</span> Liste des Factures
+
+  <!-- Hoverable Table rows -->
+  <div class="card">
+
+    <div class="col-lg-3 col-sm-6 col-12 my-4 d-flex justify-content-between">
+
+      <div class="demo-inline-spacing">
+        <button type="button" routerLink="/listVehicules" class="btn btn-warning mx-2">
+          Nouveau prix
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Prix Km</th>
+            <th>Prix Durée</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0" *ngIf="prixList.length > 0; else noData">
+          <tr *ngFor="let prix of prixList">
+            <td *ngIf="prix">{{ prix.prixParKm }}€</td>
+            <td *ngIf="prix">{{ prix.prixParDuree }}€</td>
+            <td>
+              <a class="btn btn-primary" routerLink="/detailPrix/{{prix.id}}"><i class="bx bx-edit-alt me-1"></i></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noData>
+      <tr>
+        <td colspan="4" class="text-center my-4">
+          <h4>Aucun prix n'est disponible</h4>
+        </td>
+      </tr>
+    </ng-template>
+  </div>
+  <!--/ Hoverable Table rows -->

@@ -1,0 +1,140 @@
+/* Base styles for sidebar */
+.navigation {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+  color: #343a40;
+}
+
+/* Header Styles */
+.navigation-header {
+  /* display: flex; */
+  /* justify-content: space-evenly; */
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e3e6ea;
+}
+
+.navigation-logo .logo {
+  margin-left: 30%;
+   font-weight: 900;
+  font-size: 2rem;
+  color: #0018a2; /* or your brand color */
+  font-style: normal;
+}
+
+/* Menu Styles */
+.navigation-menu {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.menu-section-title {
+  padding: 1rem;
+  font-size: 0.85rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e3e6ea;
+  color: #343a40;
+}
+
+.menu-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-item {
+  border-bottom: 1px solid #e3e6ea;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #343a40;
+  transition: background-color 0.3s;
+}
+
+.menu-link:hover {
+  background-color: #eef1f5;
+}
+
+.menu-icon {
+  margin-right: 10px;
+  font-size: 1.2rem; /* Adjust icon size */
+}
+
+/* Footer Styles */
+.navigation-footer {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e3e6ea;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 50px; /* Adjust avatar size */
+  height: 50px;
+  background-color: #adb5bd;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.user-info {
+  color: #020202;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #020202;
+}
+
+.user-role {
+  font-size: 0.85rem;
+}
+
+.logout-button {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  color: #ffffff;
+}
+
+/* Scrollbar Styles */
+.navigation-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.navigation-menu::-webkit-scrollbar-track {
+  background: #f8f9fa;
+}
+
+.navigation-menu::-webkit-scrollbar-thumb {
+  background: #adb5bd;
+}
+
+.navigation-menu::-webkit-scrollbar-thumb:hover {
+  background: #ced4da;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .navigation-header, .navigation-footer, .menu-section-title, .menu-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

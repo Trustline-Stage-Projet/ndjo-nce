@@ -1,0 +1,410 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+/* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+.cont{display:flex;justify-content:center;align-items:center;}
+.radio-tile-group{display:flex;flex-wrap:wrap;justify-content:center;}
+.radio-tile-group .input-cont .radio-button{opacity:0;position:absolute;top:0;left:0;height:100%;width:100%;margin:0;cursor:pointer;}
+.radio-tile-group .input-cont .radio-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;border:2px solid #079ad9;border-radius:5px;padding:1rem;transition:transform 300ms ease;}
+.radio-tile-group .input-cont .radio-tile-label{text-align:center;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#079ad9;}
+.radio-tile-group .input-cont .radio-button:checked + .radio-tile{background-color:#079ad9;border:2px solid #079ad9;color:white;transform:scale(1.1,1.1);}
+.radio-tile-group .input-cont .radio-button:checked + .radio-tile .icon svg{fill:white;background-color:#079ad9;}
+.radio-tile-group .input-cont .radio-button:checked + .radio-tile .radio-tile-label{color:white;background-color:#079ad9;}
+
+ /* Mobile Styles */
+ @media (max-width: 767px) {
+  .radio-tile-group .input-cont {
+    position: relative;
+    height: 5rem;
+    width: 7rem;
+    margin: 5px;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+  .radio-tile-group .input-cont {
+    position: relative;
+    height: 8rem;
+    width: 12rem;
+    margin: 5px;
+  }
+}
+
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* Un fond semi-transparent */
+  z-index: 1000; /* Pour s'assurer que le loader est au premier plan */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-image {
+  width: 600px;
+  height: 250px;
+}
+.center-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.centered-image {
+  max-width: 90%; /* Assurez-vous que l'image ne dépasse pas la largeur du conteneur */
+  max-height: 100%; /* Assurez-vous que l'image ne dépasse pas la hauteur du conteneur */
+  width: auto;
+  height: auto;
+}
+
+.custom-control.teleport-switch {
+  --color: #4cd964;
+  padding-left: 0; }
+  .custom-control.teleport-switch .teleport-switch-control-input {
+    display: none; }
+    .custom-control.teleport-switch .teleport-switch-control-input:checked ~ .teleport-switch-control-indicator {
+      border-color: var(--color); }
+      .custom-control.teleport-switch .teleport-switch-control-input:checked ~ .teleport-switch-control-indicator::after {
+        left: -14px; }
+      .custom-control.teleport-switch .teleport-switch-control-input:checked ~ .teleport-switch-control-indicator::before {
+        right: 2px;
+        background-color: var(--color); }
+    .custom-control.teleport-switch .teleport-switch-control-input:disabled ~ .teleport-switch-control-indicator {
+      opacity: .4; }
+  .custom-control.teleport-switch .teleport-switch-control-indicator {
+    display: inline-block;
+    position: relative;
+    margin: 0 10px;
+    top: 4px;
+    width: 32px;
+    height: 20px;
+    background: #fff;
+    border-radius: 16px;
+    -webkit-transition: .3s;
+    -o-transition: .3s;
+    transition: .3s;
+    border: 2px solid #ccc;
+    overflow: hidden; }
+    .custom-control.teleport-switch .teleport-switch-control-indicator::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      -webkit-transition: .3s;
+      -o-transition: .3s;
+      transition: .3s;
+      top: 2px;
+      left: 2px;
+      background: #ccc; }
+    .custom-control.teleport-switch .teleport-switch-control-indicator::before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      -webkit-transition: .3s;
+      -o-transition: .3s;
+      transition: .3s;
+      top: 2px;
+      right: -14px;
+      background: #ccc; }
+
+
+      /* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+.cont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-tile-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.radio-tile-group .input-cont .radio-button {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-tile-group .input-cont .radio-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #079ad9;
+  border-radius: 5px;
+  padding: 1rem;
+  transition: transform 300ms ease;
+}
+
+.radio-tile-group .input-cont .radio-tile-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #079ad9;
+}
+
+.radio-tile-group .input-cont .radio-button:checked+.radio-tile {
+  background-color: #079ad9;
+  border: 2px solid #079ad9;
+  color: white;
+  transform: scale(1.1, 1.1);
+}
+
+.radio-tile-group .input-cont .radio-button:checked+.radio-tile .icon svg {
+  fill: white;
+  background-color: #079ad9;
+}
+
+.radio-tile-group .input-cont .radio-button:checked+.radio-tile .radio-tile-label {
+  color: white;
+  background-color: #079ad9;
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .radio-tile-group .input-cont {
+    position: relative;
+    height: 5rem;
+    width: 7rem;
+    margin: 5px;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+  .radio-tile-group .input-cont {
+    position: relative;
+    height: 8rem;
+    width: 12rem;
+    margin: 5px;
+  }
+}
+
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  /* Un fond semi-transparent */
+  z-index: 1000;
+  /* Pour s'assurer que le loader est au premier plan */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-image {
+  width: 600px;
+  height: 250px;
+}
+
+.center-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.centered-image {
+  max-width: 90%;
+  /* Assurez-vous que l'image ne dépasse pas la largeur du conteneur */
+  max-height: 100%;
+  /* Assurez-vous que l'image ne dépasse pas la hauteur du conteneur */
+  width: auto;
+  height: auto;
+}
+
+.custom-control.teleport-switch {
+  --color: #4cd964;
+  padding-left: 0;
+}
+
+.custom-control.teleport-switch .teleport-switch-control-input {
+  display: none;
+}
+
+.custom-control.teleport-switch .teleport-switch-control-input:checked~.teleport-switch-control-indicator {
+  border-color: var(--color);
+}
+
+.custom-control.teleport-switch .teleport-switch-control-input:checked~.teleport-switch-control-indicator::after {
+  left: -14px;
+}
+
+.custom-control.teleport-switch .teleport-switch-control-input:checked~.teleport-switch-control-indicator::before {
+  right: 2px;
+  background-color: var(--color);
+}
+
+.custom-control.teleport-switch .teleport-switch-control-input:disabled~.teleport-switch-control-indicator {
+  opacity: .4;
+}
+
+.custom-control.teleport-switch .teleport-switch-control-indicator {
+  display: inline-block;
+  position: relative;
+  margin: 0 10px;
+  top: 4px;
+  width: 32px;
+  height: 20px;
+  background: #fff;
+  border-radius: 16px;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+  border: 2px solid #ccc;
+  overflow: hidden;
+}
+
+.custom-control.teleport-switch .teleport-switch-control-indicator::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+  top: 2px;
+  left: 2px;
+  background: #ccc;
+}
+
+.custom-control.teleport-switch .teleport-switch-control-indicator::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+  top: 2px;
+  right: -14px;
+  background: #ccc;
+}
+
+.de-box {
+  padding: 20px;
+  /* Espacement à l'intérieur de la carte */
+}
+
+.d-row {
+  display: flex;
+  justify-content: space-between;
+  /* Espacement entre le titre et la valeur */
+  margin-bottom: 15px;
+  /* Espacement entre chaque rangée */
+}
+
+.d-title {
+  font-weight: bold;
+  /* Texte en gras pour les titres */
+  color: #434343;
+  /* Couleur du texte pour les titres */
+}
+
+.d-value {
+  text-align: right;
+  color: #007bff;
+  /* Couleur du texte pour les valeurs, assortie à Bootstrap */
+}
+
+.formbold-steps {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  padding: 20px 0;
+}
+
+.formbold-steps::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 20px;
+  /* Décale le début de la ligne vers la droite */
+  right: 20px;
+  /* Décale la fin de la ligne vers la gauche */
+  height: 4px;
+  background-color: #dde3ec;
+  z-index: 0;
+}
+
+.formbold-steps .nav-item {
+  position: relative;
+  z-index: 1;
+  flex-grow: 0;
+  text-align: center;
+}
+
+.formbold-steps .nav-link {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 130px;
+  /* Ajuste cet espacement si nécessaire */
+  background-color: #dde3ec;
+  color: #536387;
+  border: none;
+}
+
+.formbold-steps .nav-link.active {
+  background-color: #6a64f1;
+  color: #ffffff;
+}
+
+.formbold-steps .nav-link:focus,
+.formbold-steps .nav-link:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .formbold-steps .nav-link {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 12px;
+    /* Ajuste cet espacement si nécessaire */
+    background-color: #dde3ec;
+    color: #536387;
+    border: none;
+  }
+}

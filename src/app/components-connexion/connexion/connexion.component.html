@@ -1,0 +1,410 @@
+<!-- Content -->
+<div class="container-xxl" *ngIf="!isRegisterFormVisible">
+  <div class="authentication-wrapper authentication-basic container-p-y" *ngIf="!isResetPasswordVisible">
+    <div class="authentication-inner">
+      <div class="d-flex flex-column flex-column-fluid">
+        <div *ngIf="sessionExpired" class="alert alert-primary my-3 text-center">
+          <span>{{ sessionExpiredMessage }}</span>
+        </div>
+      </div>
+      <div class="d-flex flex-column flex-column-fluid">
+        <div *ngIf="errorMessage" class="alert alert-danger my-3 text-center">
+          <span>{{ errorMessage }}</span>
+        </div>
+      </div>
+      <!-- Register -->
+      <div class="card">
+        <div class="card-body">
+          <h4 class="mb-2 text-center">CONNEXION</h4>
+
+          <form id="formAuthentication" (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="mb-3 my-5">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email ou
+                Telephone</label>
+              <input type="text" class="form-control" id="email" name="email-telephone"
+                placeholder="Entrer l'email ou le numero" autofocus formControlName="email_ou_telephone" />
+
+              <!-- Afficher les erreurs du champ email_ou_telephone -->
+              <div *ngIf="loginForm.get('email_ou_telephone')?.touched && loginForm.get('email_ou_telephone')?.errors">
+                <div
+                  *ngIf="loginForm.get('email_ou_telephone')?.hasError('required') && loginForm.get('email_ou_telephone')?.touched">
+                  <span class="text-danger">Ce champ est
+                    requis.</span>
+                </div>
+                <div *ngIf="loginForm.get('email_ou_telephone')?.hasError('pattern')">
+                  <span class="text-danger">Le format de
+                    l'email ou du numéro est
+                    incorrect.</span>
+                </div>
+                <!-- Ajoutez d'autres messages d'erreur au besoin -->
+              </div>
+            </div>
+
+            <div class="mb-3 form-password-toggle">
+              <div class="d-flex justify-content-between">
+                <label class="form-label" for="passCode">Password</label>
+                <a href="javascript:void(0);" (click)="toggleResetForm()">
+                  <small>Mots Passe Oublie?</small>
+                </a>
+              </div>
+
+              <div class="input-group input-group-merge">
+                <input [type]="showPassword ? 'text' : 'password'" id="confirm-password" class="form-control"
+                  name="passCode" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                  aria-describedby="passCode" formControlName="passCode" />
+
+                <button class="input-group-text cursor-pointer " type="button" (click)="togglePasswordVisibility()">
+                  <i class="bx" [ngClass]="{'bx-hide': !showPassword, 'bx-show': showPassword}"></i>
+                </button>
+              </div>
+              <div *ngIf="loginForm.get('passCode')?.hasError('required') && loginForm.get('passCode')?.touched">
+                <span class="text-danger">Ce champ est requis.</span>
+              </div>
+            </div>
+
+            <div class="mb-3 my-3">
+              <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!loginForm.valid">
+                Se Connecter
+              </button>
+            </div>
+          </form>
+          <p class="text-center">
+            <span>Nouveau sur notre plateforme ?</span>
+            <a href="javascript:void(0);" (click)="toggleRegisterForm()">
+              <span>Créer un compte</span>
+            </a>
+          </p>
+        </div>
+      </div>
+      <!-- /Register -->
+    </div>
+  </div>
+
+  <div class="authentication-wrapper authentication-basic container-p-y" *ngIf="isResetPasswordVisible">
+    <div class="authentication-inner py-4" *ngIf="!isVerificationPasswordVisible">
+      <div class="d-flex flex-column flex-column-fluid">
+        <div *ngIf="errorMessage" class="alert alert-danger my-3 text-center">
+          <span>{{ errorMessage }}</span>
+        </div>
+      </div>
+      <!-- Forgot Password -->
+      <div class="card">
+        <div class="card-body">
+
+          <h4 class="mb-2 text-center">Mot de passe oublié? 🔒</h4>
+          <p class="mb-4 my-3">Entrez votre email et nous vous
+            enverrons des instructions
+            pour réinitialiser votre mot de passe</p>
+          <form id="formAuthentication" class="mb-3" [formGroup]="emailForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Entrer votre Email"
+                formControlName="emailOrPhone">
+
+              <div
+                *ngIf="emailForm.get('emailOrPhone')?.hasError('required') && emailForm.get('emailOrPhone')?.touched">
+                <span class="text-danger">Ce champ est requis.</span>
+              </div>
+            </div>
+
+            <button class="btn btn-primary d-grid w-100" [disabled]="emailForm.invalid"
+              (click)="toggleVerificationForm()">Envoyer La
+              Requete
+            </button>
+          </form>
+          <div class="text-center">
+            <a href="javascript:void(0);" (click)="toggleResetForm()"
+              class="d-flex align-items-center justify-content-center">
+              <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+              Connexion
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- /Forgot Password -->
+    </div>
+
+    <div class="authentication-inner" *ngIf="isVerificationPasswordVisible">
+      <!--  Two Steps Verification -->
+      <div class="d-flex flex-column flex-column-fluid">
+        <div *ngIf="errorMessage" class="alert alert-danger my-3 text-center">
+          <span>{{ errorMessage }}</span>
+        </div>
+      </div>
+      <div class="card" *ngIf="!isVerifierPasswordVisible">
+
+        <div class="card-body">
+
+          <h4 class="mb-2 text-center">Vérification en deux étapes
+            💬</h4>
+          <p class="text-start mb-4">
+            Nous avons envoyé un code de vérification a votre mail.
+            Entrez le code dans le champ ci-dessous.
+          </p>
+          <p class="mb-0 fw-medium">Tapez votre code de sécurité à 6
+            chiffres</p>
+          <form id="twoStepsForm" [formGroup]="passwordResetControlForm">
+            <div class="mb-3">
+              <div class="auth-input-wrapper d-flex align-items-center justify-content-sm-between numeral-mask-wrapper">
+                <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2"
+                  maxlength="1" autofocus (input)="onDigitInput($event, 0)">
+                <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2"
+                  maxlength="1" (input)="onDigitInput($event, 1)">
+                <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2"
+                  maxlength="1" (input)="onDigitInput($event, 2)">
+                <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2"
+                  maxlength="1" (input)="onDigitInput($event, 3)">
+                <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2"
+                  maxlength="1" (input)="onDigitInput($event, 4)">
+                <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2"
+                  maxlength="1" (input)="onDigitInput($event, 5)">
+              </div>
+              <!-- Create a hidden field which is combined by 3 fields above -->
+              <input type="hidden" name="otp" value="{{ enteredDigits.join('') }}" />
+            </div>
+
+            <button class="btn btn-primary d-grid w-100 mb-3" (click)="toggleVerifiernForm()">
+              Vérifier mon compte
+            </button>
+            <div class="text-center">Vous n'avez pas reçu le code ?
+              <a href="javascript:void(0);" (click)="renvoyerCode()">
+                Renvoyer
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- / Two Steps Verification -->
+
+      <!-- Reset Password -->
+      <div class="card" *ngIf="isVerifierPasswordVisible">
+        <div class="card-body">
+
+          <h4 class="mb-2 text-center">Réinitialiser Le Mot De Passe 🔒</h4>
+          <p class="mb-4">Pour <span class="fw-medium">{{ passwordResetForm.get('email')?.value }}</span></p>
+          <form id="formAuthentication" class="mb-3" [formGroup]="passwordResetForm">
+            <div class="mb-3 form-password-toggle">
+              <label class="form-label" for="password">Nouveau Mot De Passe</label>
+              <div class="input-group input-group-merge">
+                <input type="password" id="password" class="form-control" name="password"
+                  placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                  aria-describedby="password" formControlName="newPassword" />
+              </div>
+              <div *ngIf="passwordResetForm.get('newPassword')?.hasError('invalidPassword')" class="text-danger">
+                Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un
+                chiffre, un caractère spécial et avoir une longueur minimale de 8 caractères.
+              </div>
+            </div>
+
+            <div class="mb-3 form-password-toggle">
+              <label class="form-label" for="confirm-password">Confirmez Le Mot De Passe</label>
+              <div class="input-group input-group-merge">
+                <input type="password" id="confirm-password" class="form-control" name="confirm-password"
+                  placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                  aria-describedby="password" formControlName="confirmNewPassword" />
+              </div>
+              <div *ngIf="passwordResetForm.get('confirmNewPassword')?.hasError('invalidPassword')" class="text-danger">
+                Les mots de passe ne correspondent pas ou ne respectent pas les critères de sécurité.
+              </div>
+
+            </div>
+            <button class="btn btn-primary d-grid w-100 mb-3" (click)="resetPassword()">
+              Sauvegarder
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- /Reset Password -->
+    </div>
+  </div>
+</div>
+<!-- / Content -->
+
+<!-- Content -->
+<div class="container-xxl " *ngIf="isRegisterFormVisible">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <div class="d-flex flex-column flex-column-fluid">
+        <div *ngIf="passNotMatch || errorMessage" class="alert alert-danger my-3 text-center">
+          <span *ngIf="passNotMatch">{{ passNotMatch }}</span>
+          <span *ngIf="errorMessage">{{ errorMessage }}</span>
+
+        </div>
+      </div>
+      <!-- Register -->
+      <div class="card ">
+        <div class="card-body">
+          <h4 class="mb-2 text-center">INSCRIPTION</h4>
+
+          <form id="formAuthentication" (ngSubmit)="registerPersonne()" [formGroup]="personneForm" class="mb-3 my-5">
+
+            <div class="mb-3">
+              <label for="selectpickerBasic" class="form-label my-2">Type d'utilisateur</label>
+              <ng-select id="client_selectionne" formControlName="type_utilisateur" data-style="btn-default">
+                <ng-option value selected class="form-label">Choisissez un type utilisateur</ng-option>
+                <ng-option value="partenaire"> Partenaire</ng-option>
+                <ng-option value="chauffeur"> Chauffeur</ng-option>
+              </ng-select>
+            </div>
+
+            <div *ngIf="personneForm.get('type_utilisateur')?.value">
+              <div class="mb-3" *ngIf="personneForm.get('type_utilisateur')?.value === 'partenaire'">
+                <label for="email" class="form-label">Nom de
+                  Entreprise</label>
+                <input type="text" class="form-control" formControlName="last_name" id="last_name"
+                  placeholder="Entrer le nom de l'entreprise" autofocus />
+
+                <!-- Afficher les erreurs du champ email_ou_telephone -->
+                <div *ngIf="personneForm.get('last_name')?.touched && personneForm.get('last_name')?.errors">
+                  <div
+                    *ngIf="personneForm.get('last_name')?.hasError('required') && personneForm.get('last_name')?.touched">
+                    <span class="text-danger">Ce champ est
+                      requis.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="personneForm.get('type_utilisateur')?.value === 'chauffeur'">
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">Prenom</label>
+                  <input type="text" class="form-control" formControlName="first_name" id="first_name"
+                    placeholder="Entrer votre prenom " autofocus />
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Nom</label>
+                  <input type="text" class="form-control" formControlName="last_name" id="last_name"
+                    placeholder="Entrer votre nom" autofocus />
+                  <!-- Afficher les erreurs du champ email_ou_telephone -->
+                  <div *ngIf="personneForm.get('last_name')?.touched && personneForm.get('last_name')?.errors">
+                    <div
+                      *ngIf="personneForm.get('last_name')?.hasError('required') && personneForm.get('last_name')?.touched">
+                      <span class="text-danger">Ce champ est
+                        requis.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Entrer l'email " autofocus
+                  formControlName="email" />
+
+                <!-- Afficher les erreurs du champ email_ou_telephone -->
+                <div *ngIf="personneForm.get('email')?.touched && personneForm.get('email')?.errors">
+                  <div *ngIf="personneForm.get('email')?.hasError('required') && personneForm.get('email')?.touched">
+                    <span class="text-danger">Ce champ est
+                      requis.</span>
+                  </div>
+                  <div *ngIf="personneForm.get('email')?.hasError('pattern')">
+                    <span class="text-danger">Le format de
+                      l'email est incorrect.</span>
+                  </div>
+                  <!-- Ajoutez d'autres messages d'erreur au besoin -->
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Numero de
+                  Telephone</label>
+                <input type="tel" class="form-control" id="telephone" name="telephone"
+                  placeholder="Entrer l'email ou le numero" autofocus formControlName="telephone" />
+
+                <!-- Afficher les erreurs du champ email_ou_telephone -->
+                <div *ngIf="personneForm.get('telephone')?.touched && personneForm.get('telephone')?.errors">
+                  <div
+                    *ngIf="personneForm.get('telephone')?.hasError('required') && personneForm.get('telephone')?.touched">
+                    <span class="text-danger">Ce champ est
+                      requis.</span>
+                  </div>
+
+                  <!-- Ajoutez d'autres messages d'erreur au besoin -->
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="adresse" class="form-label">Adresse</label>
+                <input type="text" class="form-control" id="adresse" name="adresse"
+                  placeholder="Entrer l'adresse de la boite" (focus)="initAutocomplete()" formControlName="adresse" />
+                <!-- Afficher les erreurs du champ email_ou_telephone -->
+              </div>
+
+              <div class="mb-3 form-password-toggle">
+                <label class="form-label" for="password"> Mot De Passe</label>
+                <div class="input-group input-group-merge">
+                  <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="password"
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                    aria-describedby="password" formControlName="password" />
+
+                  <button class="input-group-text cursor-pointer " type="button" (click)="togglePasswordVisibility()">
+                    <i class="bx" [ngClass]="{'bx-hide': !showPassword, 'bx-show': showPassword}"></i>
+                  </button>
+                </div>
+                <div *ngIf="personneForm.get('password')?.hasError('invalidPassword')" class="text-danger">
+                  Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un
+                  chiffre, un caractère spécial et avoir une longueur minimale de 8 caractères.
+                </div>
+              </div>
+
+              <div class="mb-3 form-password-toggle">
+                <label class="form-label" for="confirmPassword">Confirmez Le Mot De Passe</label>
+                <div class="input-group input-group-merge">
+
+                  <input [type]="showPassword ? 'text' : 'password'" id="confirmPassword" class="form-control"
+                    name="repassword"
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                    aria-describedby="repassword" formControlName="repassword" />
+
+                  <button class="input-group-text cursor-pointer " type="button" (click)="togglePasswordVisibility()">
+                    <i class="bx" [ngClass]="{'bx-hide': !showPassword, 'bx-show': showPassword}"></i>
+                  </button>
+                </div>
+                <div *ngIf="personneForm.get('repassword')?.hasError('invalidPassword')" class="text-danger">
+                  Les mots de passe ne correspondent pas ou ne respectent pas les critères de sécurité.
+                </div>
+              </div>
+
+              <div class="mb-3 my-3">
+                <button class="btn btn-primary d-grid w-100" type="submit" [disabled]="!personneForm.valid">
+                  S'inscrire
+                </button>
+              </div>
+            </div>
+
+          </form>
+          
+          <p class="text-center">
+            <span>J'ai deja un compte </span>
+            <a href="javascript:void(0);" (click)="toggleRegisterForm()">
+              <span> Me Connecter</span>
+            </a>
+        </div>
+      </div>
+      <!-- /Register -->
+    </div>
+  </div>
+</div>
+<!-- / Content -->
+
+
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center loader-container">
+  <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<!-- Modal de succès-->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalLongTitle">Information</h5>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary btn-sm" (click)="onConnexionClick()">Connexion</button>
+    </div>
+  </div>
+
+</ng-template>

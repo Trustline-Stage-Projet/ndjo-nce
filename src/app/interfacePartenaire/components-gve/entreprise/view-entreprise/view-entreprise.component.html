@@ -1,0 +1,234 @@
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">Entreprise /</span> Mon Entreprise</h4>
+
+
+<ng-template #noEntreprises>
+  <div class="app-academy">
+    <div class="card p-0 mb-4">
+      <div class="card-body d-flex flex-column flex-md-row justify-content-between p-0 pt-4">
+        <div class="app-academy-md-25 card-body py-0">
+          <img src="../../assets/img/illustrations/bulb-light.png"
+            class="img-fluid app-academy-img-height scaleX-n1-rtl" alt="Bulb in hand"
+            data-app-light-img="illustrations/bulb-light.png" data-app-dark-img="illustrations/bulb-dark.png"
+            height="90" />
+        </div>
+        <div class="app-academy-md-50 card-body d-flex align-items-md-center flex-column text-md-center">
+          <h3 class="card-title mb-4 lh-sm px-md-5 text-center">
+            Aucune entreprise n'est enregistrée
+            <span class="text-primary fw-medium text-nowrap">Actuellement</span>.
+          </h3>
+          <p class="mb-4">
+            Actuellement, Vous n'avez aucune entreprise enregistrée dans notre base de données
+            Cliquer sur le bouton si dessous pour creer votre premiere entreprise
+          </p>
+          <div class="d-flex align-items-center justify-content-between app-academy-md-80">
+            <button type="submit" routerLink="/entreprise" class="btn btn-primary text-center"><i
+                class="bx bx-briefcase"></i> Ajouter une
+              entreprise </button>
+          </div>
+        </div>
+        <div class="app-academy-md-25 d-flex align-items-end justify-content-end my-4">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div *ngIf="entreprises.length > 0; else noEntreprises">
+
+  <div class="row">
+
+    <div *ngFor="let entreprise of entreprises">
+
+     <div class="g-0 d-none d-md-flex col-8 m-auto mb-4">
+      <div class="card h-100">
+        <div class="card-body ">
+          <div class="bg-label-primary rounded-3 text-center mb-3">
+            <img class="img-fluid w-100 h-400px " [src]="getLogoUrl(entreprise.logo)" alt="Logo" />
+          </div>
+          <h4 class="mb-2 pb-1">{{ entreprise.nom }}</h4>
+          <p class="small">
+            Située à <strong>{{ entreprise.adresse }}</strong>, l'entreprise offre des solutions de reservation de
+            vehicule de qualité.
+            Contactez-nous au <strong>{{ entreprise.telephone }}</strong> ou par mail <strong>{{ entreprise.email
+              }}</strong> pour
+            en savoir plus.
+            Visitez <strong>{{ entreprise.site_web }}</strong> pour découvrir nos services.
+          </p>
+          <div class="row mb-3 g-3">
+            <div class="col-6">
+              <div class="d-flex">
+                <div class="avatar flex-shrink-0 me-2">
+                  <span class="avatar-initial rounded bg-label-primary"><i
+                      class="bx bx-calendar-exclamation bx-sm"></i></span>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-nowrap"> {{ entreprise.date_ajout | date: 'medium' }}</h6>
+                  <small>Date d'Ajout</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex">
+                <div class="avatar flex-shrink-0 me-2">
+                  <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-map bx-sm"></i></span>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-nowrap">{{ entreprise.ville_operation }}</h6>
+                  <small>{{ entreprise.pays_operation }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+
+            <div class="btn-group w-50 d-grid">
+              <button type="button" class="btn btn-dark form-label" routerLink="/parametres">
+                Configurations Des Supplements
+              </button>
+            </div>
+            <div class="mx-1"></div>
+            <div class="btn-group w-50 d-grid">
+              <button type="button" class="btn btn-dark form-label" routerLink="/detailEntreprise/{{entreprise.id}}">
+                {{ areInfosIncomplete() ? 'Finir l\'enregistrement de mon entreprise' : 'Modifier les informations de
+                  mon entreprise' }}
+              </button>
+            </div>
+          </div>
+          <!-- Buttons to submit and cancel the form -->
+          <div class="d-flex justify-content-center my-1">
+            <div class="btn-group w-50 d-grid">
+              <button type="button" class="btn btn-dark form-label dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mes vehicules
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/listVehicules/{{entreprise.id}}">Ma flottes ({{
+                    entreprise.nombre_vehicules }})</a>
+                </li>
+                <li><a class="dropdown-item" [routerLink]="['/vehicules']"
+                    [queryParams]="{ entrepriseId: entreprise.id }">Ajouter une Vehicule</a></li>
+                <li>
+              </ul>
+            </div>
+            <div class="mx-1"></div>
+            <div class="btn-group w-50 d-grid">
+              <button type="button" class="btn btn-dark form-label dropdown-toggle hide-arrow " data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mes Chauffeurs
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/listChauffeurs/{{entreprise.id}}"
+                    [queryParams]="{ entrepriseId: entreprise.id }">Mes Chauffeurs ({{ entreprise.nombre_chauffeurs
+                    }})</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/chauffeurs']"
+                    [queryParams]="{ entrepriseId: entreprise.id }">Ajouter un Chauffeur</a></li>
+                <li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+     </div>
+
+    <div class="d-md-none">
+      <div class="card h-100">
+        <div class="card-body ">
+          <div class="bg-label-primary rounded-3 text-center mb-3">
+            <img class="img-fluid w-100 h-400px " [src]="getLogoUrl(entreprise.logo)" alt="Logo" />
+          </div>
+          <h4 class="mb-2 pb-1">{{ entreprise.nom }}</h4>
+          <p class="small">
+            Située à <strong>{{ entreprise.adresse }}</strong>, l'entreprise offre des solutions de reservation de
+            vehicule de qualité.
+            Contactez-nous au <strong>{{ entreprise.telephone }}</strong> ou par mail <strong>{{ entreprise.email
+              }}</strong> pour
+            en savoir plus.
+            Visitez <strong>{{ entreprise.site_web }}</strong> pour découvrir nos services.
+          </p>
+          <div class="row mb-3 g-3">
+            <div class="col-6">
+              <div class="d-flex">
+                <div class="avatar flex-shrink-0 me-2">
+                  <span class="avatar-initial rounded bg-label-primary"><i
+                      class="bx bx-calendar-exclamation bx-sm"></i></span>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-nowrap"> {{ entreprise.date_ajout | date: 'medium' }}</h6>
+                  <small>Date d'Ajout</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex">
+                <div class="avatar flex-shrink-0 me-2">
+                  <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-map bx-sm"></i></span>
+                </div>
+                <div>
+                  <h6 class="mb-0 text-nowrap">{{ entreprise.ville_operation }}</h6>
+                  <small>{{ entreprise.pays_operation }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+
+            <div class="btn-group w-100 d-grid">
+              <button type="button" class="btn btn-primary form-label" routerLink="/parametres">
+                Configurations Des Supplements
+              </button>
+            </div>
+            <div class="mx-1"></div>
+            <div class="btn-group w-100 d-grid">
+              <button type="button" class="btn btn-primary form-label" routerLink="/detailEntreprise/{{entreprise.id}}">
+                {{ areInfosIncomplete() ? 'Finir l\'enregistrement de mon entreprise' : 'Modifier les informations de
+                  mon entreprise' }}
+              </button>
+            </div>
+          </div>
+          <!-- Buttons to submit and cancel the form -->
+          <div class="d-flex justify-content-center my-1">
+            <div class="btn-group w-100 d-grid">
+              <button type="button" class="btn btn-primary form-label dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mes vehicules
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/listVehicules/{{entreprise.id}}">Ma flottes ({{
+                    entreprise.nombre_vehicules }})</a>
+                </li>
+                <li><a class="dropdown-item" [routerLink]="['/vehicules']"
+                    [queryParams]="{ entrepriseId: entreprise.id }">Ajouter une Vehicule</a></li>
+                <li>
+              </ul>
+            </div>
+            <div class="mx-1"></div>
+            <div class="btn-group w-100 d-grid">
+              <button type="button" class="btn btn-primary form-label dropdown-toggle hide-arrow " data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mes Chauffeurs
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/listChauffeurs/{{entreprise.id}}"
+                    [queryParams]="{ entrepriseId: entreprise.id }">Mes Chauffeurs ({{ entreprise.nombre_chauffeurs
+                    }})</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/chauffeurs']"
+                    [queryParams]="{ entrepriseId: entreprise.id }">Ajouter un Chauffeur</a></li>
+                <li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,146 @@
+<div *ngIf="etat === 'affichage'">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Entreprise Partenaire /</span>Details Prix</h4>
+
+  <div class="container">
+    <div class="row mt-5  justify-content-center"> <!-- Ajout de la classe justify-content-center -->
+      <div class="col">
+        <!-- Shared Event -->
+        <div class="col-md-8 col-xl-8  mx-auto mb-4">
+          <div class="card h-100 ">
+            <div class="card-header flex-grow-0">
+              <h4>Donnees du Vehicule </h4>
+              <div class="card-body">
+                <p class="mb-1">Prix par Km: {{ prix?.prixParKm }} €</p>
+                <p class="mb-1">Prix par Durée: {{ prix?.prixParDuree }} €</p>
+                <p class="mb-1">Frais de Réservation: {{ prix?.fraisReservation }} €</p>
+                <p class="mb-1">Frais de Livraison: {{ prix?.fraisLivraison }} €</p>
+                <p class="mb-1">Frais par Défaut: {{ prix?.fraisParDefaut }} €</p>
+
+                <div class="my-3">
+                  <button type="button"routerLink="/listVehicules/{{entrepriseId}}" class="btn btn-secondary btn-sm " >Retour </button>
+                  <button type="button" class="btn btn-danger btn-sm mx-2" (click)="openConfirmationModal(confirmModal)">
+                    <span class="d-flex align-items-center justify-content-center text-nowrap">
+                      Supprimer
+                    </span>
+                  </button>
+                  <button (click)="toggleEtat()" class="btn btn-primary btn-sm ">Modifier</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<div *ngIf="etat === 'modification'">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Entreprise Partenaire /</span>Mis a jour Prix</h4>
+
+
+  <div class="container">
+    <div class="row mt-5  justify-content-center"> <!-- Ajout de la classe justify-content-center -->
+      <div class="col">
+        <!-- Shared Event -->
+        <div class="col-md-10 col-xl-10  mx-auto mb-4">
+          <div class="card h-100 ">
+            <div class="card-header flex-grow-0">
+              <h4>Donnees du Vehicule </h4>
+              <div class="card-body">
+
+                <!-- Formulaire de mise à jour -->
+                <form [formGroup]="prixForm">
+                  <div class="form-group my-2">
+                    <label for="prixParKm">Prix par Km</label>
+                    <input type="number" class="form-control" id="prixParKm" formControlName="prixParKm" required>
+                  </div>
+
+                  <div class="form-group my-2">
+                    <label for="prixParDuree">Prix par Durée</label>
+                    <input type="number" class="form-control" id="prixParDuree" formControlName="prixParDuree" required>
+                  </div>
+
+                  <div class="form-group my-2">
+                    <label for="fraisReservation">Frais de Réservation</label>
+                    <input type="number" class="form-control" id="fraisReservation" formControlName="fraisReservation"
+                      required>
+                  </div>
+
+                  <div class="form-group my-2">
+                    <label for="fraisLivraison">Frais de Livraison</label>
+                    <input type="number" class="form-control" id="fraisLivraison" formControlName="fraisLivraison"
+                      required>
+                  </div>
+
+                  <div class="form-group my-2">
+                    <label for="fraisParDefaut">Frais par Défaut</label>
+                    <input type="number" class="form-control" id="fraisParDefaut" formControlName="fraisParDefaut"
+                      required>
+                  </div>
+
+                  <!-- Ajoutez d'autres champs pour les autres propriétés du modèle Prix ici. -->
+                  <div class="my-2">
+
+                    <button type="button" class="btn btn-danger btn-sm" (click)="toggleEtat()">Annuler</button>
+                    <button type="button" class="btn btn-primary mx-2 btn-sm" (click)="openConfirmation(confirm)">Mettre
+                      à
+                      jour</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de succès-->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalLongTitle">Information</h5>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.dismiss('Close click')"
+      routerLink="/listVehicules/{{entrepriseId}}">Fermer</button>
+    </div>
+  </div>
+
+</ng-template>
+
+<ng-template #confirmModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation de suppression</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir supprimer ces donnees ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>
+
+<ng-template #confirm let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation de modification</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir modifier ces donneees ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>

@@ -1,0 +1,91 @@
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">Entreprise /</span> Mes Chauffeurs</h4>
+
+<ng-template #noEntreprises>
+  <div class="app-academy">
+    <div class="card p-0 mb-4">
+      <div class="card-body d-flex flex-column flex-md-row justify-content-between p-0 pt-4">
+        <div class="app-academy-md-25 card-body py-0">
+          <img src="../../assets/img/illustrations/bulb-light.png"
+            class="img-fluid app-academy-img-height scaleX-n1-rtl" alt="Bulb in hand"
+            data-app-light-img="illustrations/bulb-light.png" data-app-dark-img="illustrations/bulb-dark.png"
+            height="90" />
+        </div>
+        <div class="app-academy-md-50 card-body d-flex align-items-md-center flex-column text-md-center">
+          <h3 class="card-title mb-4 lh-sm px-md-5 text-center">
+            Aucun chauffeur n'est enregistrée
+            <span class="text-primary fw-medium text-nowrap">Actuellement</span>.
+          </h3>
+          <p class="mb-4">
+            Actuellement, Vous n'avez aucun chauffeur enregistrée dans le compte de votre enreprise
+            Cliquer sur le bouton si dessous pour ajouter un chauffeur
+          </p>
+          <div class="d-flex align-items-center justify-content-between app-academy-md-80">
+            <button type="submit" [routerLink]="['/chauffeurs']"
+            [queryParams]="{ entrepriseId: entrepriseId }" class="btn btn-primary text-center"><i
+                class="bx bx-user"></i> Ajouter un chauffeur </button>
+          </div>
+        </div>
+        <div class="app-academy-md-25 d-flex align-items-end justify-content-end my-4">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div *ngIf="chauffeurs.length > 0; else noEntreprises">
+
+  <button type="submit" routerLink="/chauffeurs"
+  [queryParams]="{ entrepriseId: entrepriseId }" class="btn btn-primary text-center ">
+    Ajouter un autre chauffeur
+  </button>
+
+  <div class="card mb-4 my-4">
+    <div class="card-header d-flex flex-wrap justify-content-between gap-3">
+      <div class="card-title mb-0 me-1">
+        <h5 class="mb-1">Mes Chauffeurs </h5>
+        <p class="text-muted mb-0">actuellement vous avez <strong>{{chauffeursCount}}</strong> chauffeur(s) dans votre
+          enregistrer</p>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger btn-sm" routerLink="/listEntreprise"> retour</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row gy-4 mb-4">
+        <div class="col-sm-6 col-lg-4" *ngFor="let chauffeur of chauffeurs">
+          <div class="card p-2 h-100 shadow-none border">
+            <div class="rounded-2 text-center mb-3">
+              <img class="img-fluid" [src]="getLogoUrl(chauffeur.photo)" alt="photo" />
+            </div>
+            <div class="card-body p-3 pt-2">
+
+              <a href="#" class="h5"><strong>{{chauffeur.nom}} {{chauffeur.prenom}}</strong></a>
+              <p class="mt-2">
+
+                Exercant en tant que chauffeur au sein de notre entreprise
+                depuis <strong>{{chauffeur.date_embauche| date: 'medium' }}</strong>.
+                Il est Basé à <strong>{{chauffeur.adresse}},{{chauffeur.ville}}</strong>, et joignable
+                au <strong>{{chauffeur.telephone}}</strong> ou par mail e-mail au <strong>{{chauffeur.email}}</strong>
+              </p>
+
+              <div class="d-flex justify-content-center my-2">
+                <div class="col-12 text-center">
+                  <div class="btn-group d-grid">
+                    <button type="button" class="btn btn-primary" routerLink="/detailChauffeurs/{{chauffeur.id_chauffeur}}" [queryParams]="{ chauffeur_id:chauffeur.personne_ptr, entrepriseId: entrepriseId }">
+                      <span class="d-flex align-items-center justify-content-center text-nowrap">
+                        Details Du chauffeur
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+</div>

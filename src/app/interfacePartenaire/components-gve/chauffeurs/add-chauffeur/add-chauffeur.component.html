@@ -1,0 +1,128 @@
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Entreprise Partenaire /</span> Ajouter Chauffeur
+</h4>
+<div class="container">
+  <div class="row mt-5  justify-content-center"> <!-- Ajout de la classe justify-content-center -->
+    <div class="col">
+      <!-- Shared Event -->
+      <div class="col-md-10 col-xl-10  mx-auto mb-4">
+        <div class="card h-100 ">
+          <div class="card-header flex-grow-0">
+            <h4>Donnees du Chauffeur </h4>
+
+            <div class="card-body">
+
+              <form [formGroup]="chauffeurForm " (ngSubmit)="onSubmit(content)">
+                <div class="form-password-toggle">
+                  <label class="form-label" for="basic-default-password32">Nom du chauffeur</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-user"></i></span>
+                    <input class="form-control" aria-label="Doe" aria-describedby="basic-addon-search31" type="text"
+                      id="nom" placeholder="Doe" formControlName="last_name" required>
+                  </div>
+                </div>
+                <div class="form-password-toggle my-2">
+                  <label class="form-label" for="basic-default-password32">Prenoms du chauffeur</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-user"></i></span>
+                    <input class="form-control" placeholder="John" aria-label="john"
+                      aria-describedby="basic-addon-search31" type="text" id="prenoms" formControlName="first_name"
+                      required />
+
+                  </div>
+                </div>
+
+                <div class="form-password-toggle my-2">
+                  <label class="form-label" for="basic-default-password32">Numéro de téléphone</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-phone"></i></span>
+                    <input class="form-control" placeholder="+33 2323 2333" aria-label="+33 2323 2333"
+                      aria-describedby="basic-addon-search31" type="tel" id="numero_telephone"
+                      formControlName="telephone" required>
+                  </div>
+                </div>
+
+                <div class="form-password-toggle my-2">
+                  <label class="form-label" for="basic-default-password32"> Adresse du chauffeur</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-map"></i></span>
+                    <input class="form-control" placeholder="adresse..." (focus)="initAutocomplete()"
+                      aria-label="tour...." aria-describedby="basic-addon-search31" type="text" id="adresse"
+                      formControlName="adresse" />
+                  </div>
+                </div>
+                <div class="form-password-toggle my-2">
+                  <label class="form-label" for="basic-default-password32"> Adresse
+                    e-mail du chauffeur</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-envelope"></i></span>
+                    <input type="email" class="form-control" placeholder="exple@exple.com" aria-label="exple@exple"
+                      aria-describedby="basic-addon-search31" formControlName="email" required />
+                  </div>
+                </div>
+                <div class="form-password-toggle my-2">
+                  <label class="form-label" for="basic-default-password32"> Annee d'experience du chauffeur</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class='bx bxs-calendar'></i></span>
+                    <input type="number" class="form-control" placeholder="annee experience"
+                      aria-describedby="basic-addon-search31" formControlName="annee_experience" required />
+                  </div>
+                </div>
+
+                <div class="form-password-toggle my-2" formArrayName="langues_parlees">
+                  <label class="form-label" for="basic-default-password32">Langue parler par chauffeur</label>
+                  <div class="form-check" *ngFor="let langue of langues; let i = index;">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input" [formControlName]="i"> {{ langue.nom }}
+                    </label>
+                  </div>
+                </div>
+                <div class="form-password-toggle my-2">
+                  <label class="form-label" for="basic-default-password32"> Photo du chauffeur</label>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class='bx bx-image-add'></i></span>
+                    <input type="file" accept=".jpg, .jpeg, .png" class="form-control" placeholder="photo de profil"
+                      aria-describedby="basic-addon-search31" (change)="onFileSelected($event)" required />
+                  </div>
+                </div>
+
+                <!-- Sélection de l'image -->
+
+                <div class="my-3">
+                  <button type="button" routerLink="/listChauffeurs/{{entrepriseId}}"
+                    class="btn btn-danger btn-sm mx-2">Retour </button>
+                  <button type="submit" class="btn btn-primary btn-sm">Ajouter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal de succès-->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="successMessage">Succès</h4>
+    <h4 class="modal-title" *ngIf="errorMessage">Erreur</h4>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss()">Fermer</button>
+      <button class="btn btn-primary btn-sm" (click)="modal.dismiss()" *ngIf="successMessage"
+        routerLink="/listChauffeurs/{{entrepriseId}}"> Voir
+        le chauffeur</button>
+  </div>
+</ng-template>
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center loader-container">
+  <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>

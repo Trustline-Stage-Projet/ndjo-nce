@@ -1,0 +1,425 @@
+<h4 class="fw-bold py-3 mb-4">
+  <span class="text-muted fw-light">Courses /</span> {{ pageTitle }}
+</h4>
+
+<!-- Search -->
+<!-- <div class="navbar-nav mx-2 my-4">
+  <div class="input-group input-group-merge">
+    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-search"></i></span>
+    <input type="text" class="form-control shadow-none" placeholder="Recherche..." aria-label="Recherche..."
+      aria-describedby="basic-addon-search31" (input)="onSearchChange($event)" />
+  </div>
+</div> -->
+<!-- /Search -->
+
+<div class="card mb-4" *ngIf="Result.length > 0; else affichage">
+  <div class="card-widget-separator-wrapper">
+    <div class="card-body card-widget-separator">
+      <div class="row gy-4 gy-sm-1">
+        <div class="col-sm-6 col-lg-3" (click)="getAlls()">
+          <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
+            <div>
+              <h3 class="mb-2">
+                {{
+                resultCount.beforeToday +
+                resultCount.today +
+                resultCount.afterToday
+                }}
+              </h3>
+              <p class="mb-0">Courses Total</p>
+            </div>
+            <div class="avatar me-sm-4">
+              <span class="avatar-initial bg-label-info rounded bg-label-secondary">
+                <i class="bx bx-pie-chart-alt-2 bx-sm"></i>
+              </span>
+            </div>
+          </div>
+          <hr class="d-none d-sm-block d-lg-none me-4" />
+        </div>
+
+        <div class="col-sm-6 col-lg-3" (click)="getReservationsBeforeToday()">
+          <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
+            <div>
+              <h3 class="mb-2">{{ resultCount.beforeToday }}</h3>
+              <p class="mb-0">Courses antérieures</p>
+            </div>
+            <div class="avatar me-lg-4">
+              <span class="avatar-initial bg-label-warning rounded bg-label-secondary">
+                <i class="bx bx-pie-chart-alt bx-sm"></i>
+              </span>
+            </div>
+          </div>
+          <hr class="d-none d-sm-block d-lg-none" />
+        </div>
+
+        <div class="col-sm-6 col-lg-3" (click)="getReservationsToday()">
+          <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
+            <div>
+              <h3 class="mb-2">{{ resultCount.today }}</h3>
+              <p class="mb-0">Courses du jour</p>
+            </div>
+
+            <div class="avatar me-sm-4">
+              <span class="avatar-initial bg-label-success rounded bg-label-secondary">
+                <i class="bx bx-check-double bx-sm"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3" (click)="getReservationsAfterToday()">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h3 class="mb-2">{{ resultCount.afterToday }}</h3>
+              <p class="mb-0">Courses à venir</p>
+            </div>
+            <div class="avatar">
+              <span class="avatar-initial rounded bg-label-secondary">
+                <i class="bx bx-bar-chart-square bx-sm"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hoverable Table rows -->
+<div class="card">
+  <div class="col-lg-3 col-sm-6 col-12 my-4 d-flex justify-content-between">
+    <!-- header du tableau ...-->
+  </div>
+
+  <div class="table-responsive text-nowrap">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th class="col"></th>
+          <th>
+            Prise en Charge
+            <i class="bx bx-filter" (click)="trierParDate()"></i>
+          </th>
+          <th>Course</th>
+          <th>Vehicule</th>
+          <th>statut</th>
+          <th>Prix Réservation</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0" *ngIf="(searchTerm ? searchResult : Result).length > 0; else noData">
+        <tr *ngFor="let reservation of getReservationsForCurrentPage()">
+          <td>
+
+          </td>
+          <td class="mb-6">
+            {{ reservation.datePriseEnCharge | date : "MMM, dd yyyy" }}
+          </td>
+          <td class="mb-6">
+            {{
+            reservation.lieuxPriseEnCharge +
+            " &rarr; " +
+            reservation.lieuxDestination
+            }}
+          </td>
+
+          <td class="mb-6">{{vehicule}}</td>
+
+          <td class="mb-6">
+            <button class="btn btn-xs rounded-2
+              {{
+                reservation.statutReservation === 'en_attente'
+                  ? 'btn-danger'
+                  : reservation.statutReservation === 'affecter_a_chauffeur'
+                  ? 'btn-info'
+                  : reservation.statutReservation === 'en_traitement'
+                  ? 'btn-secondary'
+                  : reservation.statutReservation === 'affecter_a_partenaire'
+                  ? 'btn-dark'
+                  : reservation.statutReservation === 'non_affecter'
+                  ? 'btn-danger'
+                  : reservation.statutReservation === 'chauffeur_notifier'
+                  ? 'btn-warning'
+                  : reservation.statutReservation === 'confirmer'
+                  ? 'btn-warning'
+                  : reservation.statutReservation === 'en_cours'
+                  ? 'btn-primary'
+                  : reservation.statutReservation === 'terminer'
+                  ? 'btn-success'
+                  : ''
+              }}" [disabled]="true">
+              {{ getFormattedStatus(reservation.statutReservation) }}
+            </button>
+          </td>
+          <td class="mb-6">
+            {{ reservation.coutDeVente | number : "1.2-2" }}€
+          </td>
+          <td class="mb-6">
+            <button class="btn btn-warning btn-sm my-4" routerLink="/infoCourse/{{ reservation.id }}">
+              <i class="bx bx-edit-alt bx-xs me-1"></i>
+            </button>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary btn-sm mx-4 "
+                 (click)="choisirAction('interne',reservation)">
+                Affecter
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Ajoutez des boutons pour la pagination de la troisième table -->
+    <div class="demo-inline-spacing">
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item prev" (click)="previousPage()" [ngClass]="{ disabled: currentPage === 1 }">
+            <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-left"></i></a>
+          </li>
+          <ng-container *ngFor="let page of getPaginationArray()">
+            <li class="page-item" [class.active]="currentPage === page">
+              <a class="page-link" href="javascript:void(0);" (click)="setCurrentPage(page)">{{ page }}</a>
+            </li>
+          </ng-container>
+          <li class="page-item next" (click)="nextPage()" [ngClass]="{
+              disabled:
+                currentPage * itemsPerPage >=
+                (searchTerm ? searchResult : Result).length
+            }">
+            <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevrons-right"></i></a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <ng-container class="my-4" *ngIf="searchTerm && searchResult.length === 0">
+    <tr>
+      <td colspan="4" class="text-center">
+        Aucun résultat trouvé pour la recherche "{{ searchTerm }}".
+      </td>
+    </tr>
+  </ng-container>
+</div>
+<!--/ Hoverable Table rows -->
+<ng-template #noData>
+  <tr>
+    <td colspan="8" class="text-center">
+      <h4 class="my-4">Aucune réservation disponible</h4>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #affichage>
+  <div class="card mb-4">
+    <div class="card-widget-separator-wrapper">
+      <div class="card-body card-widget-separator">
+        <div class="row gy-4 gy-sm-1">
+          <div class="col-sm-6 col-lg-3" (click)="getAlls()">
+            <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
+              <div>
+                <h3 class="mb-2">
+                  {{
+                  resultCount.beforeToday +
+                  resultCount.today +
+                  resultCount.afterToday
+                  }}
+                </h3>
+                <p class="mb-0">Courses Total</p>
+              </div>
+              <div class="avatar me-sm-4">
+                <span class="avatar-initial bg-label-info rounded bg-label-secondary">
+                  <i class="bx bx-pie-chart-alt-2 bx-sm"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none me-4" />
+          </div>
+
+          <div class="col-sm-6 col-lg-3" (click)="getReservationsBeforeToday()">
+            <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
+              <div>
+                <h3 class="mb-2">{{ resultCount.beforeToday }}</h3>
+                <p class="mb-0">Courses antérieures</p>
+              </div>
+              <div class="avatar me-lg-4">
+                <span class="avatar-initial bg-label-warning rounded bg-label-secondary">
+                  <i class="bx bx-pie-chart-alt bx-sm"></i>
+                </span>
+              </div>
+            </div>
+            <hr class="d-none d-sm-block d-lg-none" />
+          </div>
+
+          <div class="col-sm-6 col-lg-3" (click)="getReservationsToday()">
+            <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
+              <div>
+                <h3 class="mb-2">{{ resultCount.today }}</h3>
+                <p class="mb-0">Courses du jour</p>
+              </div>
+
+              <div class="avatar me-sm-4">
+                <span class="avatar-initial bg-label-success rounded bg-label-secondary">
+                  <i class="bx bx-check-double bx-sm"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-3" (click)="getReservationsAfterToday()">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h3 class="mb-2">{{ resultCount.afterToday }}</h3>
+                <p class="mb-0">Courses à venir</p>
+              </div>
+              <div class="avatar">
+                <span class="avatar-initial rounded bg-label-secondary">
+                  <i class="bx bx-bar-chart-square bx-sm"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title text-uppercase" *ngIf="afficherChauffeurInterne"> Affecter Un chauffeur Interne</h4>
+  </div>
+  <div class="modal-body">
+
+    <div *ngIf="!showResults">
+      <div class="card-body demo-vertical-spacing demo-only-element">
+        <h6 class="form-label text-start fw-bold">
+          cout actuelle de la course a affecter: {{ cout }} €
+        </h6>
+
+        <!-- Sélection entre compensation et commission -->
+        <div class="d-flex justify-content-between my-2">
+          <button (click)="compenserCourse()" class="btn btn-{{
+              compensationEnabled ? 'info' : 'secondary'
+            }} flex-grow-1">
+            Compenser la course
+          </button>
+          <button (click)="appliquerCommission()" class="btn btn-{{
+              !compensationEnabled ? 'info' : 'secondary'
+            }} flex-grow-1 mx-2">
+            Appliquer la commission
+          </button>
+        </div>
+
+        <!-- Champs de formulaire pour compensation et commission -->
+        <form [formGroup]="calForm">
+          <!-- Champ d'entrée pour le taux de commission -->
+          <div *ngIf="!compensationEnabled">
+            <label for="commission" class="form-label text-start my-2">Taux de commission</label>
+            <input type="number" class="form-control" id="commission" formControlName="commission"
+              placeholder="commission de la course" />
+            <span class="text-primary">Taux de commission (%) par défaut :
+              {{ calForm.get("commission")?.value || "10" }}(%)</span>
+          </div>
+
+          <!-- Champ d'entrée pour la compensation de la course -->
+          <div *ngIf="compensationEnabled">
+            <label for="compensation" class="form-label text-start my-2">Cout de Compensation</label>
+            <input type="number" class="form-control" id="compensation" formControlName="compensation"
+              placeholder="Compensation de la course" />
+            <span class="text-primary">Cout de compensation (€) par défaut :
+              {{ calForm.get("compensation")?.value || "0" }}€</span>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div *ngIf="showResults">
+      <div>
+        <h5 class="card-title mx-1">Coût de vente de la course:</h5>
+        <p class="card-text mx-3">
+          Prix initial de la course : <span class="fw-bold">{{ cout }}€</span>
+        </p>
+        <p class="card-text mx-3">
+          Prix de vente de la course :
+          <span class="fw-bold">{{ coutVente }}€</span>
+        </p>
+
+        <p class="card-text mx-3" *ngIf="!compensationEnabled">
+          Taux de commission :
+          <span class="fw-bold">{{ calForm.value.commission || 10 }}% ({{ (cout - coutVente) | number : "1.2-2"
+            }}€)</span>
+        </p>
+        <p class="card-text mx-3" *ngIf="compensationEnabled">
+          Coût de la compensation :
+          <span class="fw-bold">{{ calForm.value.compensation || 0 }}€</span>
+        </p>
+      </div>
+      <form [formGroup]="form">
+        <div *ngIf="afficherChauffeurInterne" class="my-2">
+          <label for="selectpickerBasic" class="form-label my-2">liste des Chauffeurs Internes</label>
+          <ng-select id="utilisateur_id" formControlName="utilisateur_id" data-style="btn-default">
+            <ng-option value selected class="form-label">Choisissez le chauffeur</ng-option>
+            <ng-option *ngFor="let client of chauffeurs" [value]="client.id_chauffeur">
+              {{ client.last_name }} {{ client.first_name }}
+            </ng-option>
+          </ng-select>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <div *ngIf="!showResults">
+      <button type="button" class="btn btn-info btn-sm" (click)="calculate()">
+        Calculer le tarif
+      </button>
+      <button type="button" class="btn btn-danger btn-sm mx-2" (click)="modal.close('Close click')">
+        Annuler
+      </button>
+    </div>
+
+    <div *ngIf="showResults">
+      <button type="submit" class="btn btn-primary btn-sm" [disabled]="!form.valid"
+        (click)="uploadCalcul(); onSubmit(contentMsg); modal.close('Close click')">
+        Affecter
+      </button>
+      <button type="button" class="btn btn-danger btn-sm mx-2" (click)="retour()">
+        retour
+      </button>
+    </div>
+
+  </div>
+</ng-template>
+
+
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center loader-container">
+  <div class="spinner-border" style="width: 10rem; height: 10rem" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<ng-template #contentMsg let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="successMessage">Succès</h4>
+    <h4 class="modal-title" *ngIf="errorMessage">Erreur</h4>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" *ngIf="successMessage" class="btn btn-danger btn-sm"
+      (click)="modal.close('Close click'); reload()">
+      Fermer
+    </button>
+    <button type="button" *ngIf="errorMessage" class="btn btn-danger btn-sm"
+      (click)="modal.close('Close click'); reload()">
+      Fermer
+    </button>
+  </div>
+</ng-template>

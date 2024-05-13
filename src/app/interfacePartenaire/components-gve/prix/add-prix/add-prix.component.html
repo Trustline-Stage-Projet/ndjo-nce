@@ -1,0 +1,69 @@
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Entreprise Partenaire /</span>Ajouter un Prix
+</h4>
+
+<div class="container">
+  <div class="row mt-5  justify-content-center"> <!-- Ajout de la classe justify-content-center -->
+    <div class="col">
+      <!-- Shared Event -->
+      <div class="col-md-10 col-xl-10  mx-auto mb-4">
+        <div class="card h-100 ">
+          <div class="card-header flex-grow-0">
+            <h4>Donnees du Vehicule </h4>
+            <div class="card-body">
+              <form [formGroup]="prixForm" (ngSubmit)="addPrix()">
+                <div class="form-group my-2">
+                  <label for="prixParKm">Prix par Km</label>
+                  <input type="number" class="form-control" id="prixParKm" formControlName="prixParKm" required>
+                </div>
+
+                <div class="form-group my-2">
+                  <label for="prixParDuree">Prix par Durée</label>
+                  <input type="number" class="form-control" id="prixParDuree" formControlName="prixParDuree" required>
+                </div>
+
+                <div class="form-group my-2">
+                  <label for="fraisReservation">Frais de Réservation</label>
+                  <input type="number" class="form-control" id="fraisReservation" formControlName="fraisReservation"
+                    required>
+                </div>
+
+                <div class="form-group my-2">
+                  <label for="fraisLivraison">Frais de Livraison</label>
+                  <input type="number" class="form-control" id="fraisLivraison" formControlName="fraisLivraison"
+                    required>
+                </div>
+
+                <div class="form-group my-2">
+                  <label for="fraisParDefaut">Frais par Défaut</label>
+                  <input type="number" class="form-control" id="fraisParDefaut" formControlName="fraisParDefaut"
+                    required>
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-primary btn-sm">Ajouter Prix</button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- Modal de succès-->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5   class="modal-title" id="modalLongTitle">Information</h5>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.dismiss('Close click')"
+      routerLink="/listVehicules/{{entrepriseId}}">Fermer</button>
+    </div>
+  </div>
+
+</ng-template>

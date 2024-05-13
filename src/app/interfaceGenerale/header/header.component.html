@@ -1,0 +1,107 @@
+<nav class="layout-navbar navbar-expand-xl navbar-detached align-items-center container-xxl navbar bg-navbar-theme"
+  id="layout-navbar">
+  <!-- Navbar gauche -->
+  <div class="navbar-nav-left d-flex align-items-center" id="navbar-collapse">
+    <!-- Menu par défaut -->
+    <ul class="navbar-nav flex-row align-items-center ms-auto">
+      <li class="nav-item navbar-dropdown dropdown-user">
+        <p-button (click)="sidebarVisible = true"
+          [style]="{'background-color': 'transparent', 'border': 'none', 'color': 'black'}">
+          <i class="bx bx-menu bx-sm"></i> Menu
+        </p-button>
+      </li>
+    </ul>
+  </div>
+
+</nav>
+<p-sidebar #sidebarRef [(visible)]="sidebarVisible">
+  <ng-template pTemplate="headless">
+    <!-- Structure HTML du menu de navigation avec profil et déconnexion -->
+    <div class="navigation">
+      <!-- Header avec logo et bouton de fermeture -->
+      <div class="navigation-header">
+
+        <div class="navigation-logo">
+          <span class="logo ">NDJO</span>
+        </div>
+      </div>
+      <!-- Menu de navigation -->
+      <nav class="navigation-menu">
+        <div class="menu-section">
+          <div class="menu-section-title" *ngIf="userType === 'partenaire'">ENTREPRISE PARTENAIRWE</div>
+          <div class="menu-section-title" *ngIf="userType === 'chauffeur'">CHAUFFEURS</div>
+
+          <ul class="menu-list" *ngIf="userType === 'partenaire'">
+            <li class="menu-item">
+              <a class="menu-link" (click)="sidebarVisible = false" routerLink="/course">
+                <i class='bx bx-spreadsheet'></i>
+                <span class="align-middle"> Mes Courses</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a class="menu-link" (click)="sidebarVisible = false" routerLink="/listEntreprise">
+                <i class="bx bx-cog me-2"></i>
+                <span class="align-middle"> Configurer Mon Entreprise</span>
+              </a>
+            </li>
+          </ul>
+          <ul class="menu-list" *ngIf="userType === 'chauffeur'">
+            <li class="menu-item">
+              <a class="menu-link" (click)="sidebarVisible = false" routerLink="/mesCourses">
+                <i class='bx bx-spreadsheet'></i>
+                <span class="align-middle"> Mes Courses</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a class="menu-link" (click)="sidebarVisible = false" routerLink="/profil">
+                <i class='bx bxs-user-circle'></i>
+                <span class="align-middle"> Mon Profil</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- Plus de sections de menu ici -->
+      </nav>
+
+      <!-- Profil et déconnexion -->
+      <div class="navigation-footer">
+        <div class="user-profile">
+          <div class="avatar avatar-online">
+            <img src="/assets/img/user.png" alt class="rounded-circle" />
+          </div>
+          <div class="user-info">
+            <span class="fw-semibold d-block">{{ userInfo.email || "Utilisateur"}}</span>
+            <small class="text-muted">{{ userInfo.type_utilisateur || "Type
+              Utilisateur"}}</small>
+          </div>
+        </div>
+        <div class="logout">
+          <a class="btn btn-primary logout-button" (click)="sidebarVisible = false" routerLink="/log"
+            (click)="logout()">
+            <i class="bx bx-power-off me-2"></i>
+            <span class="align-middle text-lightest">Log Out</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+  </ng-template>
+</p-sidebar>
+
+
+<!-- <ng-template #codeVerificationModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Vérification du code</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Veuillez saisir le code de verification avant d'acceder a l'expace de parametrage :</p>
+    <input type="text" [(ngModel)]="codeVerification" class="form-control" maxlength="6" autofocus>
+    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-sm" (click)="verifyCode()">Vérifier</button>
+  </div>
+</ng-template> -->

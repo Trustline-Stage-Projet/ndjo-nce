@@ -1,0 +1,886 @@
+<div *ngIf="reservation">
+
+  <div class="row invoice-preview">
+    <h4 class="fw-bold py-3 mb-4" *ngIf="!sendData"><span class="text-muted fw-light">Reservation/</span> Details</h4>
+    <h4 class="fw-bold py-3 mb-4" *ngIf="sendData"><span class="text-muted fw-light">Reservation/</span> Envoyer Les
+      Infomrations</h4>
+    <div *ngIf="!sendData">
+
+      <div class="g-0 d-none d-md-flex col-10 m-auto">
+        <div class="col-12 col-lg-8" *ngIf="reservation;else noEstimationData">
+          <div class="border rounded p-4 mb-3 pb-3 card mb-4">
+            <div class="d-flex justify-content-between my-4">
+              <h4 class="mb-2 "><strong>Details Reservation</strong></h4>
+              <div>
+                <h6 class="mb-2"><strong>Reservation N°: {{
+                    reservation.numero_reservation ? reservation.numero_reservation
+                    : reservation.id}}</strong></h6>
+                <small class="mb-1"> Creer a: <strong>{{ reservation.createdAt |
+                    date:'dd MMM yyyy à
+                    HH:mm'}}</strong></small>
+              </div>
+            </div>
+            <!-- Gift wrap -->
+            <ng-container>
+
+              <div class="bg-lighter rounded p-2">
+
+                <div class="de-spec de-box mb25">
+
+                  <!-- Utilisateur -->
+                  <div class="d-row">
+                    <span class="d-title">Client :</span>
+                    <span class="d-value" *ngIf="clientDetails"> {{clientDetails?.first_name}} {{
+                      clientDetails?.last_name}}</span>
+                  </div>
+                  <!-- Départ -->
+                  <div class="d-row">
+                    <span class="d-title">Départ :</span>
+                    <span class="d-value">{{ reservation.lieuxPriseEnCharge || "???" }}</span>
+                  </div>
+                  <!-- Destination -->
+                  <div class="d-row">
+                    <span class="d-title">Destination :</span>
+                    <span class="d-value">{{ reservation.lieuxDestination || "???" }}</span>
+                  </div>
+                  <!-- Date de prise en charge -->
+                  <div class="d-row">
+                    <span class="d-title">Date de prise en charge :</span>
+                    <span class="d-value">{{ reservation.datePriseEnCharge | date: "le dd MMM yyyy à HH:mm" || "???"
+                      }}</span>
+                  </div>
+                  <!-- Date de retour -->
+                  <div class="d-row">
+                    <span class="d-title">Date de retour :</span>
+                    <span class="d-value">{{ reservation.dateRetour ? (reservation.dateRetour | date: "le dd MMM yyyy à
+                      HH:mm") : "???" }}</span>
+                  </div>
+                  <!-- Distance parcourue -->
+                  <div class="d-row">
+                    <span class="d-title">Distance :</span>
+                    <span class="d-value">{{ reservation.distance || "???" }} Km</span>
+                  </div>
+                  <!-- Durée parcourue -->
+                  <div class="d-row">
+                    <span class="d-title">Durée :</span>
+                    <span class="d-value">{{ reservation.duree || "???" }}</span>
+                  </div>
+
+                  <div class="d-row" *ngIf="vehiculeData">
+                    <span class="d-title">vehicule :</span>
+                    <span class="d-value">{{ vehiculeData.marque}}{{
+                      vehiculeData.modele}}({{vehiculeData.typeVehicule}})</span>
+                  </div>
+                  <!-- Passagers et bagages, si disponibles -->
+                  <div *ngIf="reservation.nombrePassager || reservation.nombreBagage">
+                    <div class="d-row">
+                      <span class="d-title">Passagers :</span>
+                      <span class="d-value">{{ reservation.nombrePassager || "???" }}</span>
+                    </div>
+                    <div class="d-row">
+                      <span class="d-title">Bagages :</span>
+                      <span class="d-value">{{ reservation.nombreBagage || "???" }}</span>
+                    </div>
+                  </div>
+                  <!-- Mode de paiement -->
+                  <div class="d-row">
+                    <span class="d-title">Mode de paiement :</span>
+                    <span class="d-value">{{ reservation.modePaiement || "???" }}</span>
+                  </div>
+                  <!-- Nº De Vol/Train (Compagnie Aérienne) -->
+                  <div class="d-row">
+                    <span class="d-title">Nº De Vol/Train :</span>
+                    <span class="d-value">{{ reservation.compagnieAerienne || "???" }}</span>
+                  </div>
+                  <!-- Notes -->
+                  <div class="d-row">
+                    <span class="d-title">Notes :</span>
+                    <span class="d-value">{{ reservation.note || "???" }}</span>
+                  </div>
+
+                </div>
+
+
+              </div>
+              <hr class="mx-n4">
+              <div *ngIf="reservation; else noEstimationData">
+                <!-- Price Details -->
+                <h6>Details Prix</h6>
+                <dl class="row mb-0">
+                  <dt class="col-6 fw-normal" *ngIf="reservation.coutDeVente !== null">Cout De Vente:</dt>
+                  <dd class="col-6 text-end" *ngIf="reservation.coutDeVente !== null"><strong>{{
+                      reservation.coutDeVente | number:'1.2-2'}}€</strong></dd>
+                  <dt class="col-6 fw-normal">Cout Du Trajet:</dt>
+                  <dd class="col-6 text-end"><strong>{{ reservation.coutMajorer !==
+                      0 ? reservation.coutMajorer :
+                      reservation.coutTransport }}€</strong></dd>
+                  <dt class="col-6 fw-normal">Supplements:</dt>
+                  <dd class="col-6 text-end"><strong>{{
+                      reservation.totalAttributCost | number:'1.2-2'
+                      }}€</strong></dd>
+                  <dt class="col-6 fw-normal">Total HT:</dt>
+                  <dd class="col-6  text-end"><strong>
+                      {{ (reservation.coutTotalReservation -
+                      (reservation.coutTotalReservation* 0.10)) | number:'1.2-2'
+                      }}€</strong></dd>
+                  <dt class="col-6 fw-normal">TVA(10%):</dt>
+                  <dd class="col-6 text-end "><strong>{{
+                      (reservation.coutTotalReservation * 0.1) | number:'1.2-2'
+                      }}€</strong></dd>
+
+                </dl>
+                <hr class="mx-n4">
+                <dl class="row mb-0">
+                  <dt class="col-6">TCC Réservation:</dt>
+                  <dd class="col-6 fw-medium text-end mb-0"><a href="#"><strong>{{
+                        reservation.coutTotalReservation |
+                        number:'1.2-2'}}€</strong></a></dd>
+                </dl>
+
+              </div>
+
+            </ng-container>
+          </div>
+        </div>
+        <ng-template #noEstimationData>
+          <div class="col-12">
+            <p>Les données de l'estimation ne sont pas disponibles.</p>
+          </div>
+        </ng-template>
+        <!-- Invoice Actions -->
+        <div class="col-xl-4 col-md-4 col-12 invoice-actions">
+          <div class="card">
+            <div class="card-body">
+
+              <!-- <div class="d-flex justify-content-between">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary btn-group-xs" (click)="toggleSendMode()">
+                    <span class="d-flex align-items-center justify-content-center text-nowrap">
+                      <i class="bx bx-paper-plane bx-lg me-1"></i>
+                    </span>
+                  </button>
+                </div>
+              </div> -->
+
+              <!-- <add-to-calendar-button [attr.name]="title" options="'Apple','Google','iCal','Yahoo'"
+                  [attr.startDate]="startDate" size="8" lightMode="bodyScheme" label="Ajouter a l'Agenda"
+                  [attr.location]="location" [attr.description]="description" timeZone="currentBrowser"
+                  [attr.endTime]="endTime" [attr.startTime]="startTime">
+                </add-to-calendar-button> -->
+
+              <!-- <button class="btn btn-danger d-grid w-100 my-2"
+                (click)="openConfirmationModal(msg,contentMsg,reservationId)">
+                <span class="d-flex align-items-center justify-content-center text-nowrap">
+                  <i class="bx bx-trash bx-xs me-1"></i>
+                  Annuler la course
+                </span>
+              </button> -->
+
+              <button class="btn btn-dark d-grid w-100 my-2" routerLink="/course">
+                <span class="d-flex align-items-center justify-content-center text-nowrap">
+                  <i class="bx bx-log-out bx-xs me-1"></i>
+                  Retour
+                </span>
+              </button>
+            </div>
+          </div>
+          <!-- /Invoice Actions -->
+        </div>
+      </div>
+
+      <div class="d-md-none">
+        <div class="col-12 col-lg-8" *ngIf="reservation;else noEstimationData">
+          <div class="border rounded p-4 mb-3 pb-3 card mb-4">
+            <div class="d-flex justify-content-between my-4">
+              <h4 class="mb-2 "><strong>Details Reservation</strong></h4>
+              <div>
+                <h6 class="mb-2"><strong>N°: {{
+                    reservation.numero_reservation ? reservation.numero_reservation
+                    : reservation.id}}</strong></h6>
+                <small class="mb-1"> Creer a: <strong>{{ reservation.createdAt |
+                    date:'dd MMM yyyy à
+                    HH:mm'}}</strong></small>
+              </div>
+            </div>
+            <!-- Gift wrap -->
+            <ng-container>
+
+              <div class="bg-lighter rounded p-2">
+
+                <div class="de-spec de-box mb25">
+
+                  <!-- Utilisateur -->
+                  <div class="d-row">
+                    <span class="d-title">Client :</span>
+                    <span class="d-value" *ngIf="clientDetails"> {{clientDetails?.first_name}} {{
+                      clientDetails?.last_name}}</span>
+                  </div>
+                  <!-- Départ -->
+                  <div class="d-row">
+                    <span class="d-title">Départ :</span>
+                    <span class="d-value">{{ reservation.lieuxPriseEnCharge || "???" }}</span>
+                  </div>
+                  <!-- Destination -->
+                  <div class="d-row">
+                    <span class="d-title">Destination :</span>
+                    <span class="d-value">{{ reservation.lieuxDestination || "???" }}</span>
+                  </div>
+                  <!-- Date de prise en charge -->
+                  <div class="d-row">
+                    <span class="d-title">Date de prise en charge :</span>
+                    <span class="d-value">{{ reservation.datePriseEnCharge | date: "le dd MMM yyyy à HH:mm" || "???"
+                      }}</span>
+                  </div>
+                  <!-- Date de retour -->
+                  <div class="d-row">
+                    <span class="d-title">Date de retour :</span>
+                    <span class="d-value">{{ reservation.dateRetour ? (reservation.dateRetour | date: "le dd MMM yyyy
+                      à
+                      HH:mm") : "???" }}</span>
+                  </div>
+                  <!-- Distance parcourue -->
+                  <div class="d-row">
+                    <span class="d-title">Distance :</span>
+                    <span class="d-value">{{ reservation.distance || "???" }} Km</span>
+                  </div>
+                  <!-- Durée parcourue -->
+                  <div class="d-row">
+                    <span class="d-title">Durée :</span>
+                    <span class="d-value">{{ reservation.duree || "???" }}</span>
+                  </div>
+
+                  <div class="d-row" *ngIf="vehiculeData">
+                    <span class="d-title">vehicule :</span>
+                    <span class="d-value">{{ vehiculeData.marque}}{{
+                      vehiculeData.modele}}({{vehiculeData.typeVehicule}})</span>
+                  </div>
+                  <!-- Passagers et bagages, si disponibles -->
+                  <div *ngIf="reservation.nombrePassager || reservation.nombreBagage">
+                    <div class="d-row">
+                      <span class="d-title">Passagers :</span>
+                      <span class="d-value">{{ reservation.nombrePassager || "???" }}</span>
+                    </div>
+                    <div class="d-row">
+                      <span class="d-title">Bagages :</span>
+                      <span class="d-value">{{ reservation.nombreBagage || "???" }}</span>
+                    </div>
+                  </div>
+                  <!-- Mode de paiement -->
+                  <div class="d-row">
+                    <span class="d-title">Mode de paiement :</span>
+                    <span class="d-value">{{ reservation.modePaiement || "???" }}</span>
+                  </div>
+                  <!-- Nº De Vol/Train (Compagnie Aérienne) -->
+                  <div class="d-row">
+                    <span class="d-title">Nº De Vol/Train :</span>
+                    <span class="d-value">{{ reservation.compagnieAerienne || "???" }}</span>
+                  </div>
+                  <!-- Notes -->
+                  <div class="d-row">
+                    <span class="d-title">Notes :</span>
+                    <span class="d-value">{{ reservation.note || "???" }}</span>
+                  </div>
+
+                </div>
+
+
+              </div>
+              <hr class="mx-n4">
+              <div *ngIf="reservation; else noEstimationData">
+                <!-- Price Details -->
+                <h6>Details Prix</h6>
+                <dl class="row mb-0">
+                  <dt class="col-6 fw-normal" *ngIf="reservation.coutDeVente !== null">Cout De Vente:</dt>
+                  <dd class="col-6 text-end" *ngIf="reservation.coutDeVente !== null"><strong>{{
+                      reservation.coutDeVente | number:'1.2-2'}}€</strong></dd>
+                  <dt class="col-6 fw-normal">Cout Trajet:</dt>
+                  <dd class="col-6 text-end"><strong>{{ reservation.coutMajorer !==
+                      0 ? reservation.coutMajorer :
+                      reservation.coutTransport }}€</strong></dd>
+                  <dt class="col-6 fw-normal">Supplements:</dt>
+                  <dd class="col-6 text-end"><strong>{{
+                      reservation.totalAttributCost | number:'1.2-2'
+                      }}€</strong></dd>
+                  <dt class="col-6 fw-normal">Total HT:</dt>
+                  <dd class="col-6  text-end"><strong>
+                      {{ (reservation.coutTotalReservation -
+                      (reservation.coutTotalReservation* 0.10)) | number:'1.2-2'
+                      }}€</strong></dd>
+                  <dt class="col-6 fw-normal">TVA(10%):</dt>
+                  <dd class="col-6 text-end "><strong>{{
+                      (reservation.coutTotalReservation * 0.1) | number:'1.2-2'
+                      }}€</strong></dd>
+
+                </dl>
+                <hr class="mx-n4">
+                <dl class="row mb-0">
+                  <dt class="col-6">TCC Réservation:</dt>
+                  <dd class="col-6 fw-medium text-end mb-0"><a href="#"><strong>{{
+                        reservation.coutTotalReservation |
+                        number:'1.2-2'}}€</strong></a></dd>
+                </dl>
+
+              </div>
+
+            </ng-container>
+          </div>
+        </div>
+        <ng-template #noEstimationData>
+          <div class="col-12">
+            <p>Les données de l'estimation ne sont pas disponibles.</p>
+          </div>
+        </ng-template>
+        <!-- Invoice Actions -->
+        <div class="col-xl-4 col-md-4 col-12 invoice-actions">
+          <div class="card">
+            <div class="card-body">
+             <!-- <div class="d-flex justify-content-between">
+                 <div class="btn-group">
+                  <button type="button" class="btn btn-primary btn-group-xs" (click)="toggleSendMode()">
+                    <span class="d-flex align-items-center justify-content-center text-nowrap">
+                      <i class="bx bx-paper-plane bx-lg me-1"></i>
+                    </span>
+                  </button>
+
+                </div>
+              </div>-->
+<!--
+              <add-to-calendar-button [attr.name]="title" options="'Apple','Google','iCal','Yahoo'"
+              [attr.startDate]="startDate" size="8" lightMode="bodyScheme" label="Ajouter a l'Agenda"
+              [attr.location]="location" [attr.description]="description" timeZone="currentBrowser"
+              [attr.endTime]="endTime" [attr.startTime]="startTime">
+            </add-to-calendar-button>
+
+              <button class="btn btn-danger d-grid w-100 my-2"
+                (click)="openConfirmationModal(msg,contentMsg,reservationId)">
+                <span class="d-flex align-items-center justify-content-center text-nowrap">
+                  <i class="bx bx-trash bx-xs me-1"></i>
+                  Annuler la course
+                </span>
+              </button> -->
+
+              <button class="btn btn-dark d-grid w-100 my-2" routerLink="/course">
+                <span class="d-flex align-items-center justify-content-center text-nowrap">
+                  <i class="bx bx-log-out bx-xs me-1"></i>
+                  Retour
+                </span>
+              </button>
+
+            </div>
+          </div>
+        </div>
+        <!-- /Invoice Actions -->
+      </div>
+
+    </div>
+
+
+    <div *ngIf="sendData">
+
+      <div class="container mt-4" *ngIf="showInitialCards">
+        <div class="d-flex justify-content-around align-items-center mb-4">
+          <h4 class="mb-0 text-uppercase">Choisir le type d'envoi</h4>
+          <button class="btn btn-primary btn-sm" (click)="toggleSendMode()">Retour</button>
+        </div>
+
+        <!-- Affichage des cartes -->
+        <div class="row mb-4 g-3 justify-content-center">
+          <div class="col-sm-6 col-xl-3" *ngFor="let card of cards" (click)="selectCard(card.type, true)">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="content-left">
+                    <h3 class="mb-0">{{ card.title }}</h3>
+                    <small>{{ card.subtitle }}</small>
+                  </div>
+                  <span [ngClass]="card.badgeClass">
+                    <i [class]="card.icon"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt-4" *ngIf="selectedCardType">
+        <div class="d-flex justify-content-around align-items-center mb-4">
+          <h4 class="mb-0 text-uppercase">Choisir le type de bon </h4>
+          <button class="btn btn-primary btn-sm" (click)="resetView()">Retour</button>
+        </div>
+
+        <div class="row mb-4 g-3 justify-content-center my-4">
+          <div class="col-sm-6 col-xl-3" *ngFor="let card of cardsFille" (click)="selectCard(card.type)">
+            <div class="card" [ngClass]="{'selected-card': selectedCardType === card.type}">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="content-left">
+                    <h3 class="mb-0">{{ card.title }}</h3>
+                    <small>{{ card.subtitle }}</small>
+                  </div>
+                  <span [ngClass]="card.badgeClass">
+                    {{ card.icon }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedMainCardType === 'pdf'">
+          <div class="row mb-4 g-3 justify-content-center my-4">
+            <div class="col-sm-6 col-xl-3" *ngIf="selectedCardType === 'commande'">
+              <button class="btn btn-primary" (click)="generatePDF('commande',contentMsg)"><i
+                  class='bx bxs-download'></i><span>Télécharger le bon de commande</span></button>
+            </div>
+            <div class="col-sm-6 col-xl-3" *ngIf="selectedCardType === 'disponibilite'">
+              <button class="btn btn-primary" (click)="openModal(contentAffectation)"
+                *ngIf="reservation && reservation.coutDeVente === null"> Attribuer un prix de vente a la course
+              </button>
+              <button class="btn btn-warning" *ngIf="reservation && reservation.coutDeVente !== null"
+                (click)="generatePDF('disponibilite',contentMsg)"><i class='bx bxs-download'></i><span>Télécharger le
+                  bon de disponibilité</span></button>
+            </div>
+            <div class="col-sm-6 col-xl-3" *ngIf="selectedCardType === 'annulation'">
+              <button class="btn btn-danger" (click)="generatePDF('annulation',contentMsg)"><i
+                  class='bx bxs-download'></i><span>Télécharger le bon d'annnulation</span></button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedMainCardType === 'whatsapp'">
+          <!-- && (selectedCardType === 'disponibilite' || selectedCardType === 'annulation') -->
+
+          <div class="row mb-4 g-3 justify-content-center my-4">
+
+            <div class="col-sm-6 col-xl-3" *ngFor="let subCard of getSubCards(selectedCardType)">
+              <div class="card" *ngIf="subCard.type === 'client'">
+                <div class="card-body" (click)="openConfirmationModal2(content4, selectedCardType, 'client')">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="content-left">
+                      <h3 class="mb-0">{{ subCard.title }}</h3>
+                      <small>{{ subCard.subtitle }}</small>
+                    </div>
+                    <span [ngClass]="subCard.badgeClass">
+                      {{ subCard.icon }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="card" *ngIf="subCard.type === 'chauffeur'">
+                <div *ngIf="reservation.coutDeVente === null ;else other">
+                  <div class="card-body" (click)="dataModal(contentAffectation, selectedCardType, 'chauffeur')">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="content-left">
+                        <h3 class="mb-0">{{ subCard.title }}</h3>
+                        <small>{{ subCard.subtitle }}</small>
+                      </div>
+                      <span [ngClass]="subCard.badgeClass">
+                        {{ subCard.icon }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #other>
+                  <div class="card-body" (click)="dataModal(content5, selectedCardType, 'chauffeur')">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="content-left">
+                        <h3 class="mb-0">{{ subCard.title }}</h3>
+                        <small>{{ subCard.subtitle }}</small>
+                      </div>
+                      <span [ngClass]="subCard.badgeClass">
+                        {{ subCard.icon }}
+                      </span>
+                    </div>
+                  </div>
+                </ng-template>
+
+              </div>
+              <div class="card" *ngIf="subCard.type === 'autre'">
+                <div class="card-body" (click)="dataModal(content5, selectedCardType, 'autre')">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="content-left">
+                      <h3 class="mb-0">{{ subCard.title }}</h3>
+                      <small>{{ subCard.subtitle }}</small>
+                    </div>
+                    <span [ngClass]="subCard.badgeClass">
+                      {{ subCard.icon }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div *ngIf="selectedMainCardType === 'mail'">
+          <div class="row mb-4 g-3 justify-content-center my-4">
+
+            <div class="col-sm-6 col-xl-3" *ngFor="let subCard of getSubCards(selectedCardType)">
+              <div class="card" *ngIf="subCard.type === 'client'">
+                <div class="card-body" (click)="openConfirmModal(content3, selectedCardType,'client')">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="content-left">
+                      <h3 class="mb-0">{{ subCard.title }}</h3>
+                      <small>{{ subCard.subtitle }}</small>
+                    </div>
+                    <span [ngClass]="subCard.badgeClass">
+                      {{ subCard.icon }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="card" *ngIf="subCard.type === 'chauffeur'">
+                <div *ngIf="reservation.coutDeVente === null ;else other">
+                  <div class="card-body" (click)="dataModal(contentAffectation, selectedCardType, 'chauffeur')">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="content-left">
+                        <h3 class="mb-0">{{ subCard.title }}</h3>
+                        <small>{{ subCard.subtitle }}</small>
+                      </div>
+                      <span [ngClass]="subCard.badgeClass">
+                        {{ subCard.icon }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #other>
+                  <div class="card-body" (click)="dataModal(content5, selectedCardType, 'chauffeur')">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="content-left">
+                        <h3 class="mb-0">{{ subCard.title }}</h3>
+                        <small>{{ subCard.subtitle }}</small>
+                      </div>
+                      <span [ngClass]="subCard.badgeClass">
+                        {{ subCard.icon }}
+                      </span>
+                    </div>
+                  </div>
+                </ng-template>
+
+              </div>
+              <div class="card" *ngIf="subCard.type === 'autre'">
+                <div class="card-body" (click)="dataModal(content6, selectedCardType, 'autre')">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="content-left">
+                      <h3 class="mb-0">{{ subCard.title }}</h3>
+                      <small>{{ subCard.subtitle }}</small>
+                    </div>
+                    <span [ngClass]="subCard.badgeClass">
+                      {{ subCard.icon }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- Nouvelles cartes affichées uniquement si le type sélectionné correspond à chaque carte -->
+        <!-- <div *ngIf="selectedMainCardType !== 'pdf' && (selectedCardType === 'commande' || selectedCardType === 'disponibilite' || selectedCardType === 'annulation')">
+          <div class="row mb-4 g-3 justify-content-center my-4">
+            <div class="col-sm-6 col-xl-3" *ngFor="let subCard of getSubCards(selectedCardType)">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div class="content-left">
+                      <h3 class="mb-0">{{ subCard.title }}</h3>
+                      <small>{{ subCard.subtitle }}</small>
+                    </div>
+                    <span [ngClass]="subCard.badgeClass">
+                      {{ subCard.icon }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+
+<ng-template #msg let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation d'annulation</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir annuler cette course ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>
+
+
+<ng-template #contentMsg let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="successMessage">Succès</h4>
+    <h4 class="modal-title" *ngIf="errorMessage">Erreur</h4>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" *ngIf="errorMessage" (click)="modal.dismiss()">Fermer</button>
+    <button type="button" class="btn btn-danger btn-sm" *ngIf="successMessage" routerLink="/course"
+      (click)="modal.dismiss()">Fermer</button>
+
+  </div>
+</ng-template>
+
+
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center loader-container">
+  <div class="spinner-border" style="width: 10rem; height: 10rem;" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<ng-template #contentAffectation let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title text-uppercase"> Attribuer un prix de vente</h4>
+  </div>
+  <div class="modal-body">
+
+    <div *ngIf="!showResults">
+      <div class="card-body demo-vertical-spacing demo-only-element">
+        <h6 class="form-label text-start fw-bold">
+          cout actuelle de la course a affecter: {{ cout }} €
+        </h6>
+
+        <!-- Sélection entre compensation et commission -->
+        <div class="d-flex justify-content-between my-2">
+          <button (click)="compenserCourse()" class="btn btn-{{
+              compensationEnabled ? 'info' : 'secondary'
+            }} flex-grow-1">
+            Compenser la course
+          </button>
+          <button (click)="appliquerCommission()" class="btn btn-{{
+              !compensationEnabled ? 'info' : 'secondary'
+            }} flex-grow-1 mx-2">
+            Appliquer la commission
+          </button>
+        </div>
+
+        <!-- Champs de formulaire pour compensation et commission -->
+        <form [formGroup]="calForm">
+          <!-- Champ d'entrée pour le taux de commission -->
+          <div *ngIf="!compensationEnabled">
+            <label for="commission" class="form-label text-start my-2">Taux de commission</label>
+            <input type="number" class="form-control" id="commission" formControlName="commission"
+              placeholder="commission de la course" />
+            <span class="text-primary">Taux de commission (%) par défaut :
+              {{ calForm.get("commission")?.value || "10" }}(%)</span>
+          </div>
+
+          <!-- Champ d'entrée pour la compensation de la course -->
+          <div *ngIf="compensationEnabled">
+            <label for="compensation" class="form-label text-start my-2">Cout de Compensation</label>
+            <input type="number" class="form-control" id="compensation" formControlName="compensation"
+              placeholder="Compensation de la course" />
+            <span class="text-primary">Cout de compensation (€) par défaut :
+              {{ calForm.get("compensation")?.value || "0" }}€</span>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div *ngIf="showResults">
+      <div>
+        <h5 class="card-title mx-1">Coût de vente de la course:</h5>
+        <p class="card-text mx-3">
+          Prix initial de la course : <span class="fw-bold">{{ cout }}€</span>
+        </p>
+        <p class="card-text mx-3">
+          Prix de vente de la course :
+          <span class="fw-bold">{{ coutVente }}€</span>
+        </p>
+
+        <p class="card-text mx-3" *ngIf="!compensationEnabled">
+          Taux de commission :
+          <span class="fw-bold">{{ calForm.value.commission || 10 }}% ({{ (cout - coutVente) | number : "1.2-2"
+            }}€)</span>
+        </p>
+        <p class="card-text mx-3" *ngIf="compensationEnabled">
+          Coût de la compensation :
+          <span class="fw-bold">{{ calForm.value.compensation || 0 }}€</span>
+        </p>
+      </div>
+
+      <div
+        *ngIf="reservation.coutDeVente === null && selectedMainCardType === 'mail' && selectedType === 'disponibilite' && selectedSubType === 'chauffeur'">
+
+        <form [formGroup]="form">
+          <div class="form-group my-2">
+            <input type="text" class="form-control" formControlName="email" placeholder="Saisir l'adresse e-mail">
+            <div *ngIf="telForm.get('email')?.touched && telForm.get('email')?.invalid">
+              <div *ngIf="telForm.get('email')?.errors?.['required']">
+               <span class="text-danger">L'adresse email est requise</span>
+              </div>
+              <div *ngIf="telForm.get('email')?.errors?.['email']">
+                <span class="text-danger">L'adresse email n'est pas valide</span>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <div *ngIf="!showResults">
+      <button type="button" class="btn btn-info btn-sm" (click)="calculate()">
+        Calculer le prix de vente
+      </button>
+      <button type="button" class="btn btn-danger btn-sm mx-2" (click)="modal.close('Close click')">
+        Annuler
+      </button>
+    </div>
+
+    <div *ngIf="showResults">
+      <div
+        *ngIf="reservation.coutDeVente === null && selectedMainCardType === 'mail' && selectedType === 'disponibilite' && selectedSubType === 'chauffeur' ;else otheraction">
+
+        <button type="button" class="btn btn-primary btn-sm" [disabled]="form.get('email')?.invalid"
+          (click)=" uploadCalcul() ;openConfirmModal(content3,selectedType,selectedSubType); modal.close('Close click')">calculer
+          le cout de vente</button>
+        <button type="button" class="btn btn-danger btn-sm mx-2" (click)="modal.dismiss()">Fermer</button>
+
+      </div>
+      <ng-template #otheraction>
+
+        <div
+          *ngIf="reservation.coutDeVente === null && selectedMainCardType === 'whatsapp' && selectedType === 'disponibilite' && selectedSubType === 'chauffeur' ;else bouton">
+          <button type="button" class="btn btn-primary btn-sm"
+            (click)=" uploadCalcul() ; modal.close('Close click'); reload()">calculer le cout de vente</button>
+          <button type="button" class="btn btn-danger btn-sm mx-2" (click)="modal.dismiss();reload()">Fermer</button>
+        </div>
+
+        <ng-template #bouton>
+          <button type="submit" class="btn btn-primary btn-sm"
+            (click)="uploadCalcul(); generatePDF('disponibilite',contentMsg); modal.close('Close click')">
+            <i class='bx bxs-download'></i><span>Télécharger le bon de disponibilité</span>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm mx-2" (click)="retour()">
+            retour
+          </button>
+        </ng-template>
+
+      </ng-template>
+
+
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #content5 let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Saisir Le Numero de Telephone</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <form [formGroup]="telForm">
+    <div class="modal-body">
+      <input type="text" class="form-control" formControlName="telephone" placeholder="Saisir le numero de telephone">
+      <!-- Affichage du message d'erreur "champ requis" -->
+      <div *ngIf="telForm.get('telephone')?.hasError('required') && telForm.get('telephone')?.touched">
+        <div class="text-danger">Le numero de téléphone est requis.</div>
+      </div>
+
+      <!-- Affichage du message d'erreur "longueur minimale" -->
+      <div *ngIf="telForm.get('telephone')?.hasError('minlength') && telForm.get('telephone')?.touched">
+        <div class="text-danger">Le numero de téléphone doit avoir au moins 0 8
+          caractères.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary"
+        (click)="openConfirmationModal2(content4,selectedType,selectedSubType);modal.dismiss()">Envoyer</button>
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #content3 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation d'envoi</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div *ngIf="selectedSubType === 'chauffeur' || selectedSubType === 'autre'; else otherMessage">
+      <span>Valider l'envoi du mail a cet E-mail : {{ form.get('email')?.value }}</span>
+    </div>
+    <ng-template #otherMessage>
+      <span>Valider l'envoi du mail a cet E-mail : {{ clientDetails.email }}</span>
+    </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>
+
+<ng-template #content4 let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation d'envoi</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div *ngIf="selectedSubType === 'chauffeur' || selectedSubType === 'autre'; else otherMessage">
+      <span>Valider l'envoi du message au numéro : {{ telForm.get('telephone')?.value }}</span>
+    </div>
+    <ng-template #otherMessage>
+      <span>Valider l'envoi du message au numéro : {{ clientDetails.telephone }}</span>
+    </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>
+
+
+<ng-template #content6 let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Saisir L'email d'envoi</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()">
+    </button>
+  </div>
+
+  <form [formGroup]="form">
+    <div class="modal-body">
+      <input type="text" class="form-control" formControlName="email" placeholder="Saisir l'adresse e-mail">
+      <div *ngIf="telForm.get('email')?.touched && telForm.get('email')?.invalid">
+        <div *ngIf="telForm.get('email')?.errors?.['required']">
+         <span class="text-danger">L'adresse email est requise</span>
+        </div>
+        <div *ngIf="telForm.get('email')?.errors?.['email']">
+          <span class="text-danger">L'adresse email n'est pas valide</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" [disabled]="form.get('email')?.invalid"
+        (click)="openConfirmModal(content3,selectedType,selectedSubType);modal.dismiss()">Envoyer</button>
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fermer</button>
+    </div>
+  </form>
+</ng-template>

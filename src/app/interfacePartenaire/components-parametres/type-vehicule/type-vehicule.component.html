@@ -1,0 +1,89 @@
+<h4 class="fw-bold py-3 mb-4" *ngIf="!isUpdateForm"><span class="text-muted fw-light">Configuration /</span> Ajouter Type de vehicule
+</h4>
+<h4 class="fw-bold py-3 mb-4" *ngIf="isUpdateForm"><span class="text-muted fw-light">Configuration /</span> Modifier Type de vehicule
+</h4>
+<div class="container">
+  <div class="row mt-5  justify-content-center"> <!-- Ajout de la classe justify-content-center -->
+    <div class="col">
+      <!-- Shared Event -->
+      <div class="col-md-10 col-xl-10  mx-auto mb-4">
+        <div class="card h-100 ">
+          <div class="card-header flex-grow-0">
+            <h4>Information du Type</h4>
+            <form *ngIf="!isUpdateForm" [formGroup]="form">
+              <div class="form-group">
+                <label for="nom_type">Nom Du Type de Vehicule :</label>
+                <input type="text" class="form-control" id="nom_type" formControlName="nom_type">
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description :</label>
+                <input type="text" class="form-control" id="description" formControlName="description">
+              </div>
+
+              <div class="my-4">
+                <button type="button" class="btn btn-primary btn-sm" (click)="addTypeVehicule()">Ajouter</button>
+              </div>
+            </form>
+
+            <form *ngIf="isUpdateForm" [formGroup]="updateForm">
+              <div class="form-group">
+                <label for="nom_type">Nom Du Type de Vehicule :</label>
+                <input type="text" class="form-control" id="nom_type" formControlName="nom_type">
+              </div>
+
+
+              <div class="form-group">
+                <label for="description">Description :</label>
+                <input type="text" class="form-control" id="description" formControlName="description">
+              </div>
+
+              
+              <div class="my-4">
+                <button type="button" class="btn btn-danger btn-sm" routerLink="/parametres">Annuler</button>
+                <button type="button" class="btn btn-primary btn-sm mx-2"
+                (click)="openConfirmationModal(confirmModal)">Modifier</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal de succès -->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalLongTitle">Information</h5>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-sm" routerLink="/parametres"
+        (click)="modalRef.dismiss('Close click')">Fermer</button>
+    </div>
+  </div>
+
+</ng-template>
+
+
+
+<ng-template #confirmModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation de mise a jour</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir modifier ces informations ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>

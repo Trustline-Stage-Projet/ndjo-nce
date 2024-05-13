@@ -1,0 +1,263 @@
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Entreprise
+    Partenaire /</span> Mis a jour Vehicule
+</h4>
+<div class="container">
+  <div class="row mt-5  justify-content-center">
+    <!-- Ajout de la classe justify-content-center -->
+    <div class="col">
+      <!-- Shared Event -->
+      <div class="col-md-10 col-xl-10  mx-auto mb-4">
+        <div class="card h-100 ">
+          <div class="card-header flex-grow-0">
+            <h4>Donnees du Vehicule </h4>
+            <div class="card-body">
+              <form [formGroup]="vehiculeForm" (ngSubmit)="onUpdate()">
+                <!-- Type de véhicule -->
+                <div class="form-group my-2">
+                  <label for="typeVehicule">Type de Véhicule</label>
+                  <select class="form-control" id="typeVehicule" formControlName="typeVehicule">
+                    <option value disabled selected>Sélectionnez un
+                      type</option>
+                    <option *ngIf="typesVehicules.length === 0" disabled>Aucun
+                      type de véhicule disponible</option>
+                    <option *ngFor="let type of typesVehicules" [value]="type.nom_type">{{ type.nom_type }}</option>
+                  </select>
+                </div>
+                <!-- Marque -->
+                <div class="form-group my-2">
+                  <label for="marque">Marque</label>
+                  <input type="text" class="form-control" id="marque" formControlName="marque">
+                </div>
+
+                <!-- Modèle -->
+                <div class="form-group my-2">
+                  <label for="modele">Modèle</label>
+                  <input type="text" class="form-control" id="modele" formControlName="modele">
+                </div>
+
+                <!-- Année de fabrication -->
+                <div class="form-group my-2">
+                  <label for="anneeFabrication">Année de Fabrication</label>
+                  <input type="number" class="form-control" id="anneeFabrication" formControlName="annee_fabrication">
+                </div>
+
+                <!-- Immatriculation -->
+                <div class="form-group my-2">
+                  <label for="immatriculation">Immatriculation</label>
+                  <input type="text" class="form-control" id="immatriculation" formControlName="immatriculation">
+                </div>
+
+                <!-- Capacité de passagers -->
+                <div class="form-group my-2">
+                  <label for="capacitePassagers">Capacité de Passagers</label>
+                  <select id="capacitePassagers" formControlName="capacite_passagers" class="form-control">
+                    <option value disabled selected>Choisissez la capacité de
+                      passager</option>
+                    <option *ngFor="let option of generateOptions(10)">{{ option
+                      }}</option>
+                  </select>
+                </div>
+
+                <!-- Capacité de chargement -->
+                <div class="form-group my-2">
+                  <label for="capaciteChargement">Capacité de Chargement</label>
+                  <select class="form-control" id="capaciteChargement" formControlName="capacite_chargement">
+                    <option value disabled selected>Choisissez la capacité de
+                      chargement</option>
+                    <option value="Cabine">Cabine</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                  </select>
+                </div>
+                <!-- Case à cocher pour activer/désactiver la condition -->
+                <div class="form-group my-2">
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-check-input" id="tempsDisponibiliteToggle"
+                      (click)="switchToggle()">
+                    <label class="custom-control-label" for="tempsDisponibiliteToggle">Disponibilité en
+                      jours</label>
+                  </div>
+                </div>
+                <!-- Sélecteur pour le temps de disponibilité -->
+                <div class="form-group my-2">
+                  <label for="tempsDisponibiliteSelect">Choisir le temps de
+                    disponibilité</label>
+                  <select class="form-control" id="tempsDisponibiliteSelect" formControlName="tempsDisponibilite">
+                    <!-- Options par défaut -->
+                    <option *ngIf="!tempsDisponibiliteToggle" value="3h">1h-3h</option>
+                    <option *ngIf="!tempsDisponibiliteToggle" value="6h">3h-6h</option>
+                    <option *ngIf="!tempsDisponibiliteToggle" value="12h">6h-12h</option>
+                    <option *ngIf="!tempsDisponibiliteToggle" value="24h">12h-24h</option>
+                    <!-- Option à afficher lorsque le switch est activé -->
+                    <option *ngIf="tempsDisponibiliteToggle" value="1j">1
+                      jour</option>
+                    <option *ngIf="tempsDisponibiliteToggle" value="2j">2
+                      jours</option>
+                    <option *ngIf="tempsDisponibiliteToggle" value="3j+">3
+                      jours+</option>
+                  </select>
+                </div>
+                <!-- Lieu de base -->
+                <div class="form-group my-2">
+                  <label for="lieuDeBase">Lieu de Base</label>
+                  <input type="text" class="form-control" id="lieu_de_base" formControlName="lieu_de_base">
+                </div>
+
+                <!-- Type de carburant -->
+                <div class="form-group my-2">
+                  <label for="typeCarburant">Type de Carburant</label>
+                  <input type="text" class="form-control" id="typeCarburant" placeholder="Entrez le type de carburant"
+                    formControlName="type_carburant">
+                </div>
+
+                <!-- Sélection de fichier -->
+                <div class="form-group my-2" *ngIf="ancienCheminImage">
+                  <div class="bg-label-primary rounded-2 text-center mb-2">
+                    <img [src]="ancienCheminImage" class="img-fluid w-100" alt="Ancien Logo" />
+                  </div>
+
+                </div>
+
+                <div class="form-group my-2">
+                  <label for="galerie">Galerie</label>
+                  <input type="file" id="galerie" (change)="onFileSelected($event)" class="form-control" />
+                  <!-- Affichage de l'aperçu du logo -->
+                  <div class="col-12 col-md-12 col-xl-12 mb-4">
+                    <div class="card h-100">
+                      <div class="card-body">
+                        <div class="bg-label-primary rounded-2 text-center mb-2">
+                          <div *ngIf="Preview" class="logo-preview">
+                            <img [src]="Preview" alt="photo" class="img-fluid w-100">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Moteur -->
+                <div class="form-group my-2">
+                  <label for="moteur">Moteur <small class="text-warning">(facultatif)</small></label>
+                  <input type="text" class="form-control" id="moteur" formControlName="moteur"
+                    placeholder="- pas encore défini -">
+                </div>
+
+                <!-- Couleur intérieure -->
+                <div class="form-group my-2">
+                  <label for="couleurInterieure">Couleur Intérieure <small
+                      class="text-warning">(facultatif)</small></label>
+                  <input type="text" class="form-control" id="couleurInterieure" formControlName="couleur_interieur"
+                    placeholder="- pas encore défini -">
+                </div>
+
+                <!-- Couleur extérieure -->
+                <div class="form-group my-2">
+                  <label for="couleurExterieure">Couleur Extérieure <small
+                      class="text-warning">(facultatif)</small></label>
+                  <input type="text" class="form-control" id="couleurExterieure" placeholder="- pas encore défini -"
+                    formControlName="couleur_exterieur">
+                </div>
+
+                <!-- Puissance -->
+                <div class="form-group my-2">
+                  <label for="puissance">Puissance <small class="text-warning">(facultatif)</small></label>
+                  <input type="text" class="form-control" id="puissance" formControlName="puissance"
+                    placeholder="- pas encore défini -">
+                </div>
+
+                <!-- Longueur -->
+                <div class="form-group my-2">
+                  <label for="longueur">Longueur <small class="text-warning">(facultatif)</small></label>
+                  <input type="text" class="form-control" id="longueur" formControlName="longueur"
+                    placeholder="- pas encore défini -">
+                </div>
+
+                <!-- Transmission -->
+                <div class="form-group my-2">
+                  <label for="transmission">Transmission <small class="text-warning">(facultatif)</small></label>
+                  <input type="text" class="form-control" id="transmission" formControlName="transmission"
+                    placeholder="- pas encore défini -">
+                </div>
+
+                <!-- Supplément -->
+                <div class="form-group my-2">
+                  <label for="supplement">Supplément <small class="text-warning">(facultatif)</small></label>
+                  <input type="text" class="form-control" id="supplement" formControlName="supplement"
+                    placeholder="- pas encore défini -">
+                </div>
+
+
+                <div class="my-3">
+                  <!-- Bouton de soumission -->
+
+                  <button type="button" routerLink="/listVehicules/{{entrepriseId}}"
+                    class="btn btn-secondary btn-sm ">Retour </button>
+                  <button type="button" class="btn btn-danger mx-2 btn-sm "
+                    (click)="openConfirmationModal(confirmModal)">
+                    <span class="d-flex align-items-center justify-content-center text-nowrap">
+                      Supprimer
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm " (click)="openConfirmation(confirm)">Mettre à
+                    jour</button>
+
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de succès -->
+<ng-template #successModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalLongTitle">Message</h5>
+    </div>
+    <div class="modal-body">
+      <p class="success-message">{{ successMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.dismiss('Close click')"
+        routerLink="/listVehicules/{{entrepriseId}}">Fermer</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #confirmModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation de
+      suppression</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir supprimer ce vehicule ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>
+
+<ng-template #confirm let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Confirmation de
+      modification</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()">
+    </button>
+  </div>
+  <div class="modal-body">
+    Êtes-vous sûr de vouloir modifier les donneees de ce vehicule ?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modal.dismiss()">Non</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="modal.close('confirm')">Oui</button>
+  </div>
+</ng-template>
